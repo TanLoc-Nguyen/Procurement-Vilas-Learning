@@ -1,0 +1,2805 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VILAS Procurement Executive — Course Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F3EB;
+    --bg-deep: #EFEAE0;
+    --surface: #FFFFFF;
+    --surface-raised: #FBFAF5;
+    --border: #DDD7C8;
+    --border-soft: #E8E3D5;
+    --text: #1C1B17;
+    --text-muted: #65625A;
+    --text-faint: #94907F;
+    --accent: #C94F1E;
+    --accent-soft: #F8E6DA;
+    --accent-deep: #9C3A11;
+    --blue: #1E5A94;
+    --blue-soft: #E3EEF7;
+    --green: #2F6B3D;
+    --green-soft: #E6F0E7;
+    --amber: #8A5A0D;
+    --amber-soft: #F8EED8;
+    --purple: #5A3C90;
+    --purple-soft: #EBE5F3;
+    --tag-bg: #ECE7D9;
+    --tag-text: #4B4940;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --sidebar-w: 300px;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════════ LAYOUT ═══════════ */
+  .app {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ═══════════ SIDEBAR ═══════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-deep);
+    border-right: 1px solid var(--border);
+    padding: 36px 28px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .brand {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .brand-mark::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .brand-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .brand-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .nav-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+
+  .nav-list {
+    list-style: none;
+  }
+  .nav-item {
+    margin-bottom: 2px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .nav-link:hover {
+    background: var(--border-soft);
+    color: var(--text);
+  }
+  .nav-link.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .nav-link.active .nav-num {
+    color: var(--bg);
+    opacity: 0.6;
+  }
+  .nav-link.disabled {
+    color: var(--text-faint);
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .nav-link.disabled:hover {
+    background: transparent;
+    color: var(--text-faint);
+  }
+  .nav-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 28px;
+  }
+  .nav-text {
+    flex: 1;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+  .nav-meta {
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .nav-link.active .nav-meta {
+    color: var(--bg);
+    opacity: 0.6;
+  }
+
+  .sidebar-footer {
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-faint);
+    line-height: 1.5;
+  }
+
+  /* ═══════════ MAIN ═══════════ */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .session {
+    display: none;
+    min-height: 100vh;
+  }
+  .session.active {
+    display: block;
+  }
+
+  /* ═══════════ SESSION HEADER ═══════════ */
+  .session-header {
+    background: var(--text);
+    color: var(--bg);
+    padding: 56px 72px 48px;
+  }
+  .session-header .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(201, 79, 30, 0.12);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .session-header h1 {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  }
+  .session-header .lead {
+    font-size: 15px;
+    color: #B8B4A8;
+    line-height: 1.65;
+    max-width: 640px;
+  }
+  .session-header .meta-row {
+    margin-top: 32px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .session-header .meta-item {
+    font-size: 12px;
+    color: #8A867A;
+  }
+  .session-header .meta-item strong {
+    color: #DDD7C8;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+
+  /* ═══════════ CONTENT AREA ═══════════ */
+  .content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 72px 120px;
+  }
+
+  /* CHAPTER */
+  .chapter {
+    margin-bottom: 64px;
+    scroll-margin-top: 20px;
+  }
+  .chapter-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .chapter-title {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  }
+  .chapter-lead {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  /* TEXT */
+  p { margin-bottom: 14px; }
+  strong { font-weight: 600; color: var(--text); }
+  em { font-style: italic; color: var(--text-muted); }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    font-variation-settings: 'opsz' 48;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  ul, ol {
+    margin: 12px 0 16px 20px;
+  }
+  ul li, ol li {
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  ul li::marker {
+    color: var(--accent);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* CALLOUT */
+  .callout {
+    padding: 18px 22px;
+    border-radius: var(--radius);
+    margin: 22px 0;
+    border-left: 3px solid;
+    font-size: 14.5px;
+  }
+  .callout-accent { background: var(--accent-soft); border-color: var(--accent); }
+  .callout-blue { background: var(--blue-soft); border-color: var(--blue); }
+  .callout-green { background: var(--green-soft); border-color: var(--green); }
+  .callout-amber { background: var(--amber-soft); border-color: var(--amber); }
+  .callout-purple { background: var(--purple-soft); border-color: var(--purple); }
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .callout-accent .callout-label { color: var(--accent); }
+  .callout-blue .callout-label { color: var(--blue); }
+  .callout-green .callout-label { color: var(--green); }
+  .callout-amber .callout-label { color: var(--amber); }
+  .callout-purple .callout-label { color: var(--purple); }
+  .callout p { margin-bottom: 8px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* EXAMPLE BOX */
+  .example {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .example-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .example p { font-size: 14px; color: var(--text); margin-bottom: 8px; }
+  .example p:last-child { margin-bottom: 0; }
+
+  /* QUOTE */
+  blockquote {
+    border-left: 2px solid var(--text-faint);
+    padding: 4px 22px;
+    margin: 20px 0;
+    font-family: var(--serif);
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.55;
+    font-variation-settings: 'opsz' 48;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    margin: 22px 0;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--surface);
+  }
+  thead th {
+    text-align: left;
+    padding: 11px 16px;
+    background: var(--bg-deep);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+    color: var(--text);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-raised); }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 22px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 18px 18px 16px;
+  }
+  .card-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .tag-accent { background: var(--accent-soft); color: var(--accent); }
+  .tag-blue { background: var(--blue-soft); color: var(--blue); }
+  .tag-green { background: var(--green-soft); color: var(--green); }
+  .tag-amber { background: var(--amber-soft); color: var(--amber); }
+  .tag-purple { background: var(--purple-soft); color: var(--purple); }
+  .card-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .card-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* STEP FLOW */
+  .step-flow {
+    margin: 22px 0;
+  }
+  .step-item {
+    display: flex;
+    gap: 18px;
+    padding: 12px 0;
+    position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    bottom: -14px;
+    width: 1px;
+    background: var(--border);
+  }
+  .step-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-body { flex: 1; padding-top: 3px; }
+  .step-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* PILL ROW */
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .pill {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+  }
+
+  /* NUMBERED LIST */
+  .numbered-list {
+    counter-reset: num;
+    list-style: none;
+    margin: 16px 0;
+    padding: 0;
+  }
+  .numbered-list li {
+    counter-increment: num;
+    display: flex;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+  .numbered-list li:last-child { border-bottom: none; }
+  .numbered-list li::marker { content: none; }
+  .numbered-list li::before {
+    content: counter(num, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 22px;
+  }
+  .numbered-list li strong { color: var(--text); }
+
+  /* STRUCT CARDS 3-col */
+  .struct-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 22px 0;
+  }
+  .struct-card {
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .struct-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13.5px;
+    font-weight: 600;
+    background: var(--bg-deep);
+  }
+  .struct-body {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .struct-body ul {
+    margin: 8px 0 0 16px;
+  }
+  .struct-body ul li {
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* NEED-WANT */
+  .nw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 22px 0;
+  }
+  .nw-card {
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    border: 1px solid;
+  }
+  .nw-card.need {
+    background: var(--accent-soft);
+    border-color: #EAC2AC;
+  }
+  .nw-card.want {
+    background: var(--blue-soft);
+    border-color: #B9CFE5;
+  }
+  .nw-card-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .nw-card.need .nw-card-title { color: var(--accent); }
+  .nw-card.want .nw-card-title { color: var(--blue); }
+  .nw-card p { font-size: 13.5px; color: var(--text); margin: 0; line-height: 1.6; }
+
+  /* MATURITY */
+  .maturity-ladder {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin: 22px 0;
+  }
+  .maturity-rung {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .maturity-rung:last-child { border-bottom: none; }
+  .maturity-rung:hover { background: var(--surface-raised); }
+  .maturity-level {
+    width: 128px;
+    flex-shrink: 0;
+    padding: 16px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-right: 1px solid var(--border-soft);
+  }
+  .maturity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .maturity-content { padding: 16px 20px; flex: 1; }
+  .maturity-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .maturity-desc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+  .divider-ornament {
+    text-align: center;
+    margin: 48px 0;
+    font-family: var(--serif);
+    color: var(--text-faint);
+    font-size: 20px;
+    letter-spacing: 0.5em;
+  }
+
+  /* TOC INLINE */
+  .toc-inline {
+    background: var(--bg-deep);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 32px 0 48px;
+  }
+  .toc-inline-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+  .toc-inline ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+  }
+  .toc-inline ol li {
+    padding: 0;
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .toc-inline ol li a {
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    gap: 10px;
+  }
+  .toc-inline ol li a:hover { color: var(--accent); }
+  .toc-inline ol li a::before {
+    content: attr(data-num);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    min-width: 22px;
+  }
+
+  /* LANDING PLACEHOLDER */
+  .landing {
+    padding: 72px 72px 120px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .landing-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .landing-title {
+    font-family: var(--serif);
+    font-size: 52px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 22px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  }
+  .landing-lead {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 40px;
+  }
+  .session-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .session-card {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .session-card:hover {
+    background: var(--surface-raised);
+    border-color: var(--border);
+    transform: translateX(2px);
+  }
+  .session-card.locked {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .session-card.locked:hover {
+    transform: none;
+    background: var(--surface);
+  }
+  .session-card-num {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--accent);
+    min-width: 56px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  }
+  .session-card.locked .session-card-num {
+    color: var(--text-faint);
+  }
+  .session-card-body { flex: 1; }
+  .session-card-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 4px;
+  }
+  .session-card-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    font-variation-settings: 'opsz' 48;
+  }
+  .session-card-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .session-card-arrow {
+    color: var(--text-faint);
+    font-size: 20px;
+    align-self: center;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .session-card:hover .session-card-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* MOBILE TOGGLE */
+  .mobile-header {
+    display: none;
+    background: var(--text);
+    color: var(--bg);
+    padding: 14px 20px;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .mobile-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .mobile-toggle {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .mobile-header { display: flex; }
+    .sidebar {
+      position: fixed;
+      transform: translateX(-100%);
+      transition: transform 0.25s;
+      width: 85%;
+      max-width: 320px;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .session-header { padding: 40px 24px 32px; }
+    .session-header h1 { font-size: 30px; }
+    .content { padding: 36px 24px 80px; }
+    .landing { padding: 48px 24px 80px; }
+    .landing-title { font-size: 36px; }
+    .struct-grid { grid-template-columns: 1fr; }
+    .nw-grid { grid-template-columns: 1fr; }
+    .toc-inline ol { grid-template-columns: 1fr; }
+    .session-card { gap: 16px; padding: 18px 20px; }
+    .session-card-num { font-size: 32px; min-width: 40px; }
+    .session-card-title { font-size: 18px; }
+  }
+
+  /* ═══════════ KEYWORD EXTERNAL LINKS ═══════════ */
+  .kw {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1.5px dashed var(--accent-orange-border);
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 500;
+    transition: background 0.12s, border-color 0.12s;
+    cursor: pointer;
+  }
+  .kw:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .kw::after {
+    content: '↗';
+    font-size: 0.72em;
+    opacity: 0.6;
+    font-weight: 400;
+    flex-shrink: 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+  /* BACKDROP */
+  .backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9;
+  }
+  .backdrop.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">VILAS</div>
+      <div class="brand-title">Procurement<br>Executive</div>
+      <div class="brand-subtitle">Ghi chú khóa học — từ sơ cấp đến chiến lược</div>
+    </div>
+
+    <div class="nav-label">Mục lục</div>
+    <ul class="nav-list" id="navList">
+      <li class="nav-item">
+        <a class="nav-link" data-target="home">
+          <span class="nav-num">—</span>
+          <div>
+            <div class="nav-text">Trang chủ</div>
+            <div class="nav-meta">Overview tất cả buổi</div>
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-target="session-1">
+          <span class="nav-num">01</span>
+          <div>
+            <div class="nav-text">Intro & Flowchart</div>
+            <div class="nav-meta">Procurement trong Supply Chain</div>
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-target="session-2">
+          <span class="nav-num">02</span>
+          <div>
+            <div class="nav-text">Objectives & Responsibilities</div>
+            <div class="nav-meta">Vai trò chiến lược của Procurement</div>
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-target="session-3">
+          <span class="nav-num">03</span>
+          <div>
+            <div class="nav-text">Procurement Category</div>
+            <div class="nav-meta">Category Management Playbook</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <strong style="color: var(--text-muted); font-weight: 500;">Domic's study notes</strong><br>
+      Procurement Executive · 2026<br><br>
+      <span style="color: var(--accent); font-weight: 500;">📌 Share website này:</span><br>
+      Upload file lên <a href="https://app.netlify.com/drop" target="_blank" style="color:var(--accent); text-decoration:underline dotted">Netlify Drop</a> — kéo thả, có link ngay.
+    </div>
+  </aside>
+
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="main">
+
+    <div class="mobile-header">
+      <div class="mobile-title">VILAS · Procurement</div>
+      <button class="mobile-toggle" id="mobileToggle">Menu</button>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━ HOME ━━━━━━━━━━━━━━━ -->
+    <section class="session active" id="home">
+      <div class="landing">
+        <div class="landing-eyebrow">Course Notes · Vilas Procurement Executive</div>
+        <h1 class="landing-title">Hành trình từ Buyer<br>đến Value Creator.</h1>
+        <p class="landing-lead">
+          Tổng hợp, phân tích và mở rộng kiến thức từ khóa học Procurement Executive của VILAS.
+          Mỗi buổi được ghi chép chi tiết, kèm case study thực tế và thêm ngữ cảnh từ các nguồn
+          bên ngoài để đào sâu hơn nội dung trên lớp.
+        </p>
+
+        <div class="session-list">
+          <a class="session-card" data-target="session-1">
+            <div class="session-card-num">01</div>
+            <div class="session-card-body">
+              <div class="session-card-eyebrow">Buổi 1</div>
+              <div class="session-card-title">Intro & Flowchart — Procurement trong Supply Chain</div>
+              <p class="session-card-desc">SCOR model, Strategic Sourcing vs Operational Procurement, KPI cốt lõi (Cost Savings & Cost Avoidance), ISM Mastery Model, và case đường Úc của Pepsi.</p>
+            </div>
+            <div class="session-card-arrow">→</div>
+          </a>
+
+          <a class="session-card" data-target="session-2">
+            <div class="session-card-num">02</div>
+            <div class="session-card-body">
+              <div class="session-card-eyebrow">Buổi 2</div>
+              <div class="session-card-title">Procurement Objectives & Responsibilities</div>
+              <p class="session-card-desc">Mục tiêu chiến lược, cấu trúc tổ chức (Centralized/Decentralized/Hybrid), Supplier Segmentation, Upstream Management với mô hình Toll Manufacturing, Maturity Evolution 5 cấp.</p>
+            </div>
+            <div class="session-card-arrow">→</div>
+          </a>
+
+          <a class="session-card" data-target="session-3">
+            <div class="session-card-num">03</div>
+            <div class="session-card-body">
+              <div class="session-card-eyebrow">Buổi 3</div>
+              <div class="session-card-title">Procurement Category &amp; Category Management</div>
+              <p class="session-card-desc">Direct vs Indirect taxonomy, Category Management Playbook 8 bước, Preparation (RACI + Influence/Interest matrix), Internal Analysis (Spend Cube, Spend Tree, Pareto), và ISM Skill #1 — Business Acumen.</p>
+            </div>
+            <div class="session-card-arrow">→</div>
+          </a>
+
+          <div class="session-card locked">
+            <div class="session-card-num">04</div>
+            <div class="session-card-body">
+              <div class="session-card-eyebrow">Buổi 4 · Coming Soon</div>
+              <div class="session-card-title">Chưa cập nhật</div>
+              <p class="session-card-desc">Nội dung buổi 4 sẽ được bổ sung ngay sau khi có ghi chú từ lớp học.</p>
+            </div>
+            <div class="session-card-arrow">⋯</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━ SESSION 1 ━━━━━━━━━━━━━━━ -->
+    <section class="session" id="session-1">
+      <div class="session-header">
+        <div class="tag">Vilas PE · Buổi 01</div>
+        <h1>Intro &amp; Flowchart<br>Procurement trong Supply Chain</h1>
+        <p class="lead">
+          Bức tranh tổng thể về Procurement — vị trí trong SCOR model, phân biệt Strategic Sourcing với Operational
+          Procurement, các KPI cốt lõi, và hành trình từ Traditional Procurement đến Trusted Advisor của doanh nghiệp.
+        </p>
+        <div class="meta-row">
+          <div class="meta-item"><strong>Trọng tâm:</strong> SCOR · Sourcing · KPIs · ISM Model</div>
+          <div class="meta-item"><strong>Thời lượng đọc:</strong> ~18 phút</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div class="toc-inline">
+          <div class="toc-inline-title">Trong buổi này</div>
+          <ol>
+            <li><a data-num="1." href="#s1-overview">Procurement trong SC — "Mẹ đi chợ"</a></li>
+            <li><a data-num="2." href="#s1-planning">Giai đoạn Planning</a></li>
+            <li><a data-num="3." href="#s1-procurement">Giai đoạn Procurement</a></li>
+            <li><a data-num="4." href="#s1-scheduling">Production &amp; Scheduling</a></li>
+            <li><a data-num="5." href="#s1-excellence">Process Excellence</a></li>
+            <li><a data-num="6." href="#s1-scor">Mô hình SCOR</a></li>
+            <li><a data-num="7." href="#s1-two-streams">Sourcing vs Purchasing</a></li>
+            <li><a data-num="8." href="#s1-roi">Giá trị Procurement mang lại</a></li>
+            <li><a data-num="9." href="#s1-kpis">KPIs cốt lõi</a></li>
+            <li><a data-num="10." href="#s1-modern">Trusted Advisor</a></li>
+            <li><a data-num="11." href="#s1-sugar">Case: Đường Úc</a></li>
+            <li><a data-num="12." href="#s1-ism">ISM Mastery Model</a></li>
+          </ol>
+        </div>
+
+        <!-- CHAPTER 1 -->
+        <div class="chapter" id="s1-overview">
+          <div class="chapter-label">Chương 1</div>
+          <h2 class="chapter-title">Toàn cảnh: Procurement là "Mẹ đi chợ"</h2>
+          <p class="chapter-lead">
+            Ẩn dụ gia đình giúp hiểu Procurement không chỉ là mua đồ — mà là toàn bộ quá trình đảm bảo
+            nguyên vật liệu <strong>đúng · đủ · kịp · rẻ · chất lượng</strong> để Supply Chain vận hành mượt mà.
+          </p>
+
+          <p>Procurement không đứng một mình — nó nằm trong 4 khối lớn của Supply Chain, mỗi khối có vai trò riêng tương tự như các công việc của "mẹ" trong gia đình:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Khối SC</th>
+                  <th>Vai trò tương đương</th>
+                  <th>Tên chuyên môn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Planning</strong></td><td>Lên thực đơn, xem tiền, xem thời gian</td><td>Demand Planning + Supply Planning</td></tr>
+                <tr><td><strong>Procurement</strong></td><td>Đi chợ, chọn NCC, mặc cả, mua hàng</td><td>Sourcing → Negotiation → Operations</td></tr>
+                <tr><td><strong>Production</strong></td><td>Nấu ăn (sắp xếp thứ tự món)</td><td>Scheduling (liên quan gián tiếp)</td></tr>
+                <tr><td><strong>Logistics</strong></td><td>Dọn cơm ra bàn</td><td>Warehouse + Transportation + Freight Forwarding</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CHAPTER 2 - PLANNING -->
+        <div class="chapter" id="s1-planning">
+          <div class="chapter-label">Chương 2</div>
+          <h2 class="chapter-title">Giai đoạn Planning — Trước khi "đi chợ"</h2>
+
+          <h3>2.1 · Demand Planning</h3>
+          <p><em>"Mẹ hỏi cả nhà muốn ăn gì."</em></p>
+          <p>Mẹ hỏi con cái và chồng hôm nay muốn ăn gì, xem lịch sử ăn uống tuần trước, scan chợ xem rau cá tươi gì. Đây chính là <strong>Demand Forecasting & Planning</strong>.</p>
+
+          <div class="callout callout-blue">
+            <span class="callout-label">Core Concept</span>
+            <p><strong>Qualitative</strong> (hỏi khách hàng nội bộ) kết hợp với <strong>Quantitative</strong> (dùng lịch sử + AI forecast).</p>
+            <p>Công cụ phổ biến: SAP IBP, Kinaxis, Oracle Demantra.</p>
+          </div>
+
+          <h3>2.2 · Supply Planning</h3>
+          <p><em>"Mẹ xem tiền có đủ không, thời gian có kịp không."</em></p>
+          <p>Tính tiền trong ví, xem có kịp nấu trước 7h không, xem tủ lạnh còn gì. Đây là <strong>Supply Planning</strong> — kiểm tra Available Budget, Lead time, Capacity của NCC và nhà máy.</p>
+
+          <h3>2.3 · Xử lý bất ngờ — Forecast luôn sai</h3>
+          <p>6h50 con gọi về: "Mẹ ơi hôm nay con không ăn cơm." Bố dắt sếp về ăn tối đột xuất.</p>
+
+          <blockquote>Forecast is always wrong — the question is how wrong, and how fast we react.</blockquote>
+
+          <p>Forecast là <strong>Science</strong> (dùng toán, AI). Nhưng quản lý sự thay đổi là <strong>Art</strong> — cần agility, buffer stock, supplier flexibility, scenario planning.</p>
+        </div>
+
+        <!-- CHAPTER 3 - PROCUREMENT -->
+        <div class="chapter" id="s1-procurement">
+          <div class="chapter-label">Chương 3</div>
+          <h2 class="chapter-title">Giai đoạn Procurement — Đi chợ thật sự</h2>
+
+          <h3>3.1 · Sourcing — Mẹ đã có mối quen</h3>
+          <p>Mẹ không xách giỏ đi vòng vòng chợ, mà đi thẳng tới người bán rau, cá, thịt mà mẹ đã xây dựng mối quan hệ lâu năm. Chỉ cần nói: <em>"Con của mẹ Hạnh đây, cho con 2kg cá basa tươi nhé."</em></p>
+
+          <div class="pill-row">
+            <span class="pill">Strategic Sourcing</span>
+            <span class="pill">Supplier Relationship Management (SRM)</span>
+            <span class="pill">Supplier Development</span>
+            <span class="pill">Category Management</span>
+          </div>
+
+          <h3>3.2 · Negotiation — Mẹ mặc cả</h3>
+          <p>Mẹ deal giá, deal chất lượng, deal thời gian giao, deal chiết khấu.</p>
+
+          <div class="pill-row">
+            <span class="pill">Win-Win / Competitive / Collaborative</span>
+            <span class="pill"><a href="https://www.investopedia.com/terms/t/totalcostofownership.asp" target="_blank" class="kw">Total Cost of Ownership (TCO)</a></span>
+            <span class="pill">Should Cost Analysis</span>
+            <span class="pill">Long-term Contract vs Spot Buy</span>
+          </div>
+
+          <h3>3.3 · Procurement Operations — Ra đơn, thanh toán</h3>
+          <ol>
+            <li>Lên yêu cầu mua (<strong>PR</strong> – Purchase Request)</li>
+            <li>Chuyển thành đơn mua (<strong>PO</strong> – Purchase Order)</li>
+            <li>Theo dõi giao hàng, nhận hàng, kiểm tra chất lượng</li>
+            <li>Thanh toán với <strong>3-way match</strong>: PO – GR – Invoice</li>
+          </ol>
+
+          <div class="callout callout-purple">
+            <span class="callout-label">Digital Procurement</span>
+            <p>Procure-to-Pay (P2P) Process đang được tự động hóa nhanh chóng: e-Procurement, RPA, OCR, Blockchain PO — giảm thời gian xử lý từ ngày xuống giờ.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 4 - SCHEDULING -->
+        <div class="chapter" id="s1-scheduling">
+          <div class="chapter-label">Chương 4</div>
+          <h2 class="chapter-title">Production &amp; Scheduling — Thứ tự nấu quan trọng</h2>
+
+          <p>Giả sử cần sản xuất 10 thùng gồm 7Up, Pepsi, Mirinda và Xá xị. Vậy nên sản xuất món nào trước?</p>
+
+          <div class="example">
+            <div class="example-label">Thứ tự tối ưu</div>
+            <p><strong>7Up</strong> (nhạt nhất) → <strong>Mirinda</strong> → <strong>Pepsi</strong> → <strong>Xá xị</strong> (đậm nhất). Giảm thời gian vệ sinh máy (CIP time).</p>
+            <p>Sau đó chạy size lon 250ml trước rồi mới 350ml.</p>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill">Changeover minimization</span>
+            <span class="pill">Campaign Planning</span>
+            <span class="pill">Color sequencing</span>
+            <span class="pill">Same packaging size grouping</span>
+          </div>
+
+          <p>Procurement Manager phải hiểu Scheduling để cung ứng material <strong>theo thứ tự tối ưu</strong>, tránh stock dead hoặc line stop.</p>
+        </div>
+
+        <!-- CHAPTER 5 - EXCELLENCE -->
+        <div class="chapter" id="s1-excellence">
+          <div class="chapter-label">Chương 5</div>
+          <h2 class="chapter-title">Process Excellence &amp; Logistics</h2>
+
+          <p><em>"Mẹ muốn nấu nhanh hơn, ngon hơn, rẻ hơn."</em></p>
+          <p>Mẹ thử nghiệm ướp thịt mới, thay đổi thứ tự nấu, dùng nồi áp suất — tiết kiệm gas, tiết kiệm thời gian.</p>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-accent">Excellence</div>
+              <div class="card-title">Cost Saving & Value Creation</div>
+              <p class="card-body">Hard Saving (tiết kiệm trực tiếp trên P&L) + Soft Saving (giá trị khó định lượng).</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Continuous Improvement</div>
+              <div class="card-title">Kaizen & Lean Procurement</div>
+              <p class="card-body">Cải tiến liên tục, loại bỏ waste trong P2P process.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">Sustainability</div>
+              <div class="card-title">ESG in Procurement</div>
+              <p class="card-body">Mua nguyên liệu xanh, đo lường supplier carbon footprint, circular economy.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-purple">Digital</div>
+              <div class="card-title">Digital Transformation</div>
+              <p class="card-body">e-Sourcing, AI-driven spend analysis, predictive supply chain.</p>
+            </div>
+          </div>
+
+          <h3>Logistics — Dọn cơm ra bàn</h3>
+          <p>Ngày nay Procurement thường kết hợp chặt với Logistics. Mục tiêu cuối cùng không phải là giá mua rẻ nhất, mà là <strong>Delivered Cost Optimization</strong> — tổng chi phí giao đến tay người dùng cuối thấp nhất.</p>
+
+          <div class="pill-row">
+            <span class="pill">Freight Forwarding</span>
+            <span class="pill">Transportation Planning</span>
+            <span class="pill">Warehouse Layout</span>
+            <span class="pill">FIFO</span>
+          </div>
+        </div>
+
+        <!-- CHAPTER 6 - SCOR -->
+        <div class="chapter" id="s1-scor">
+          <div class="chapter-label">Chương 6</div>
+          <h2 class="chapter-title">Mô hình SCOR — Procurement nằm ở đâu?</h2>
+
+          <p>SCOR (<a href="https://www.ascm.org/learning-development/certifications-credentials/scor/" target="_blank" class="kw">Supply Chain Operations Reference</a>) chia Supply Chain thành 6 khối chính:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SCOR Process</th>
+                  <th>"Mẹ" tương đương</th>
+                  <th>Vai trò của Procurement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Plan</strong></td><td>Lên thực đơn + xem tiền + xem thời gian</td><td>Demand & Supply Planning (gián tiếp hỗ trợ)</td></tr>
+                <tr style="background: var(--accent-soft);"><td><strong>Source</strong></td><td>Đi chợ, chọn mối, mặc cả, mua hàng</td><td><strong>Procurement = SOURCE ← Chúng ta ở đây</strong></td></tr>
+                <tr><td><strong>Make</strong></td><td>Nấu ăn</td><td>Production + Scheduling</td></tr>
+                <tr><td><strong>Deliver</strong></td><td>Dọn cơm ra bàn</td><td>Logistics + Distribution</td></tr>
+                <tr><td><strong>Return</strong></td><td>Xử lý hàng thừa/hỏng</td><td>Reverse Logistics</td></tr>
+                <tr><td><strong>Enable</strong></td><td>Quản lý quy trình, công nghệ, con người</td><td>Process Excellence + Digital</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Kết luận quan trọng</span>
+            <p>Procurement chính là <strong>SOURCE</strong> trong SCOR. Toàn bộ giá trị mang lại cho công ty nằm ở khối Source — tức là kiểm soát đầu vào (inputs) của toàn chuỗi cung ứng.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 7 - TWO STREAMS -->
+        <div class="chapter" id="s1-two-streams">
+          <div class="chapter-label">Chương 7</div>
+          <h2 class="chapter-title">Sourcing vs Purchasing — Hai mảng chính</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tiêu chí</th>
+                  <th>Sourcing (Strategic)</th>
+                  <th>Purchasing (Operational)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Tính chất</strong></td><td>Strategic — impact lớn, dài hạn</td><td>Tactical / Operational — daily, tốc độ cao</td></tr>
+                <tr><td><strong>Công việc</strong></td><td>Develop supplier, qualify, negotiate, ký HĐ dài hạn</td><td>Release PR → PO, nhận hàng, thanh toán</td></tr>
+                <tr><td><strong>Value Impact</strong></td><td>Cao — thay spec, thay supplier, savings lớn</td><td>Thấp hơn — đảm bảo operation không stop</td></tr>
+                <tr><td><strong>Ví dụ "mẹ nấu cơm"</strong></td><td>Mẹ chọn mối quen, deal giá dài hạn</td><td>Mẹ đi chợ hàng ngày theo thực đơn</td></tr>
+                <tr><td><strong>% thời gian</strong></td><td>30–40% (Manager)</td><td>60–70% (Buyer/Executive)</td></tr>
+                <tr><td><strong>KPI chính</strong></td><td>Cost Savings + Value Engineering + SRM</td><td>On-time Delivery, PO accuracy, Payment on-time</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <blockquote>Strategic Sourcing tập trung vào Value Creation (tiết kiệm lớn + đổi mới). Operational Procurement đảm bảo không bị thiếu hàng, operation chạy mượt.</blockquote>
+        </div>
+
+        <!-- CHAPTER 8 - ROI -->
+        <div class="chapter" id="s1-roi">
+          <div class="chapter-label">Chương 8</div>
+          <h2 class="chapter-title">Procurement mang lại giá trị gì?</h2>
+
+          <p>Công thức cơ bản:</p>
+          <p><code>Profit = Revenue − Cost</code></p>
+          <p>Khi nhắc đến Procurement, KPI đầu tiên là <strong>Cost</strong>. Nhưng hãy xem một bài toán:</p>
+
+          <div class="example">
+            <div class="example-label">Ví dụ thực tế</div>
+            <p>Công ty A có Revenue 100tr, Variable Cost 80tr → Profit 20tr. Muốn tăng Profit lên 15% (+3tr, thành 23tr) thì làm sao?</p>
+            <p><strong>Nếu tăng Revenue:</strong> Cost chiếm 80% của Revenue, nên muốn có thêm 3tr Profit, phải tăng Revenue lên <strong>115tr</strong> (tăng 15%).</p>
+            <p><strong>Nếu giảm Cost:</strong> Savings đi thẳng vào P&L — chỉ cần giảm <strong>3tr Cost</strong> (giảm 3.75%) là đạt mục tiêu.</p>
+          </div>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Bài học cốt lõi</span>
+            <p>Save được <strong>1 đồng Cost = tăng thẳng 1 đồng Profit</strong>. Còn tăng 1 đồng Revenue chưa chắc Profit tăng được 1 đồng — vì vẫn còn phần Cost cho Revenue tăng lên đó.</p>
+            <p>Đây chính là đòn bẩy khiến Procurement trở thành chức năng tạo giá trị hiệu quả nhất trong công ty.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 9 - KPIS -->
+        <div class="chapter" id="s1-kpis">
+          <div class="chapter-label">Chương 9</div>
+          <h2 class="chapter-title">KPI chính — Cost Savings vs Cost Avoidance</h2>
+
+          <h3>Cost Savings — Tiết kiệm thực tế</h3>
+          <p>So sánh giá mua năm nay với năm ngoái (cùng spec).</p>
+
+          <div class="example">
+            <div class="example-label">Ví dụ</div>
+            <p><strong>Mẹ nấu cơm:</strong> Năm ngoái mua 1kg thịt bò 250k, năm nay cùng chất lượng chỉ 220k → Savings 30k/kg.</p>
+            <p><strong>Thực tế:</strong> Văn phòng phẩm năm ngoái 10k/cây bút → năm nay 8k/cây.</p>
+            <p><strong>Value Engineering:</strong> Chai Aquafina thay đổi thiết kế cổ chai (phần tốn nhiều nhựa nhất) → giảm 10–15% nhựa mà vẫn giữ dung tích → tiết kiệm hàng tỷ đồng/năm. Hay giảm số lần uốn cong khung kim loại từ 2 xuống 1 → giá giảm 50%.</p>
+          </div>
+
+          <h3>Cost Avoidance — Tránh tăng chi phí</h3>
+          <p>So sánh giá NCC chào đầu tiên với giá cuối cùng sau đàm phán.</p>
+
+          <div class="example">
+            <div class="example-label">Ví dụ</div>
+            <p><strong>Mẹ nấu cơm:</strong> NCC chào tăng thịt lên 300k/kg vì lạm phát, mẹ mặc cả còn 270k/kg → Avoidance 30k/kg.</p>
+            <p><strong>Thực tế:</strong> NCC lon nhôm chào tăng 25% so năm trước, Procurement deal kéo xuống chỉ tăng 10% → Avoidance 15% trên toàn bộ volume.</p>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-label">Phân biệt quan trọng</span>
+            <p><strong>Commodities</strong> (nhôm, đường, dầu ăn): Giá theo thị trường thế giới → khó tính Savings thuần.</p>
+            <p><strong>Non-commodities</strong> (bao bì thiết kế, dịch vụ vận chuyển): Procurement có không gian tối ưu sâu qua đàm phán + Value Engineering.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 10 - MODERN -->
+        <div class="chapter" id="s1-modern">
+          <div class="chapter-label">Chương 10</div>
+          <h2 class="chapter-title">Traditional → Modern — Procurement là Trusted Advisor</h2>
+
+          <div class="struct-grid">
+            <div class="struct-card">
+              <div class="struct-header">Traditional</div>
+              <div class="struct-body">
+                <p>Nhận yêu cầu → sourcing → mua → xong. Tập trung giá rẻ nhất. Thụ động.</p>
+              </div>
+            </div>
+            <div class="struct-card">
+              <div class="struct-header">Modern</div>
+              <div class="struct-body">
+                <p>Cầu nối thông tin thị trường. Mang ý tưởng cải tiến từ NCC về cho công ty. Chủ động.</p>
+              </div>
+            </div>
+            <div class="struct-card">
+              <div class="struct-header">Trusted Advisor</div>
+              <div class="struct-body">
+                <p>Được các phòng ban chủ động hỏi ý kiến. Là người tổ chức kết nối giữa stakeholder nội bộ và supplier ecosystem.</p>
+              </div>
+            </div>
+          </div>
+
+          <h3>Case Study — PepsiCo × Suntory Partnership Workshop</h3>
+          <p>Mời toàn bộ lãnh đạo các bộ phận của Pepsi tham gia workshop với Strategic Vendor. Chia sẻ tầm nhìn 2–3 năm tới → NCC đưa ra ý tưởng cải tiến. Ví dụ: kỹ thuật in lon DynaMark cho lon bia Sài Gòn với họa tiết 63 tỉnh thành — mặt trước logo, mặt sau hình tỉnh khác nhau. Procurement chính là người tổ chức và kết nối.</p>
+
+          <h3>Case Study — Coca-Cola × NCC lon</h3>
+          <p>Vì được Coca-Cola chia sẻ kế hoạch, NCC quyết định xây nhà máy ngay bên cạnh → giao hàng Just-In-Time (JIT), giảm tồn kho và chi phí vận chuyển cho cả hai bên.</p>
+
+          <h3>Case Study — Unilever &amp; P&amp;G</h3>
+          <p>Procurement không chỉ mua mà còn hợp tác supplier để tối ưu route vận chuyển, dùng bao bì tái sử dụng — vừa giảm chi phí vừa đạt mục tiêu ESG (giảm phát thải).</p>
+        </div>
+
+        <!-- CHAPTER 11 - SUGAR -->
+        <div class="chapter" id="s1-sugar">
+          <div class="chapter-label">Chương 11 · Case Study</div>
+          <h2 class="chapter-title">Đường Úc — Xuất nhập khẩu tại chỗ</h2>
+
+          <p class="chapter-lead">Một trong những case study sáng tạo nhất trong bài — minh họa rõ ràng Procurement có thể tạo value như thế nào khi đối mặt với rào cản thuế quan.</p>
+
+          <h3>Bối cảnh</h3>
+          <p>Năm 2020, các quốc gia ĐNÁ có hiệp định ATIGA — mua hàng không giới hạn thuế quan. Pepsi chủ yếu mua đường từ Thái Lan vì giá rất cạnh tranh (được nhà nước tài trợ).</p>
+          <p>Tuy nhiên, hiệp hội bảo vệ đường VN đã push nhà nước áp <strong>thuế anti-dumping</strong> lên đường Thái Lan. Thái Lan tìm cách né — đưa đường sang Indonesia tráo bao rồi đưa về VN. Nhà nước tiếp tục áp thêm <strong>thuế tránh lẫn trốn</strong> (~50% trên total).</p>
+          <p>Kết quả: Giá đường nhập khẩu từ Thái Lan, Malaysia, Indonesia tăng vọt. Team Procurement bế tắc.</p>
+
+          <h3>Giải pháp sáng tạo — Toll trong Bonded Warehouse</h3>
+
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Identify nguồn không dính thuế</div>
+                <p class="step-desc">Đường Úc không dính thuế anti-dumping. Nhưng đường Úc là đường raw — Pepsi chỉ dùng đường tinh luyện, và không có nhà máy tinh luyện.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Đấu thầu hạn ngạch Quota</div>
+                <p class="step-desc">Pepsi đấu thầu để có hạn ngạch nhập đường — nhưng vẫn phải trả tiền cho quyền nhập, và vẫn dính một phần thuế.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Ký HĐ với Trader — giao về Bonded Warehouse</div>
+                <p class="step-desc">Pepsi ký hợp đồng mua đường trắng xuất xứ Úc với Trader, Incoterm CPT Bonded Warehouse (kho ngoại quan trong lãnh thổ VN).</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Trader ký HĐ gia công với NCC tinh luyện tại VN</div>
+                <p class="step-desc">NCC tinh luyện đường Úc ngay trong Bonded Warehouse — chưa chính thức nhập vào VN, nên chưa dính thuế.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title">Mở tờ khai nhập khẩu Under Quota</div>
+                <p class="step-desc">Pepsi mở tờ khai nhập đường đã tinh luyện từ Bonded Warehouse về nhà máy — dưới hạn ngạch đã đấu thầu.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-green">
+            <span class="callout-label">Savings insight</span>
+            <p>Không cần phải xuất hàng ra khỏi VN rồi nhập lại — toàn bộ tinh luyện diễn ra trong kho ngoại quan. Tiết kiệm chi phí logistics rất lớn.</p>
+            <p><strong>Bài học:</strong> Procurement ở đẳng cấp cao là người <em>trao đổi với NCC để cùng đưa ra phương án</em>, không phải chỉ đi mua. Đây là minh họa hoàn hảo cho mô hình Tolling trong thực tế Việt Nam.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 12 - ISM -->
+        <div class="chapter" id="s1-ism">
+          <div class="chapter-label">Chương 12</div>
+          <h2 class="chapter-title">ISM Mastery Model — Bản đồ năng lực</h2>
+
+          <p>ISM (Institute for Supply Management) Mastery Model là bộ khung <strong>16 kỹ năng</strong> xây dựng từ cơ bản đến Advanced, bao phủ toàn bộ năng lực của một Procurement professional.</p>
+
+          <blockquote>Đây là bản đồ năng lực — giúp biết mình đang ở đâu, cần phát triển gì tiếp theo, và học gì để lên level.</blockquote>
+
+          <h3>12.1 · Category Management — Nền tảng của mọi thứ</h3>
+          <p>Hiểu sâu về mặt hàng mình phụ trách — cả từ bên trong lẫn bên ngoài công ty — <strong>trước khi làm bất kỳ điều gì khác</strong>.</p>
+
+          <h4>Internal Analysis — Nhìn vào bên trong</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Góc nhìn</th><th>Câu hỏi cần trả lời</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Tỷ trọng</td><td>Category này chiếm bao nhiêu % tổng spend?</td></tr>
+                <tr><td>Trend</td><td>Spend đang đi lên hay đi xuống?</td></tr>
+                <tr><td>NCC hiện tại</td><td>Có bao nhiêu NCC? Phân bổ như thế nào?</td></tr>
+                <tr><td>Giá cả</td><td>Giá qua các năm biến động ra sao?</td></tr>
+                <tr><td>Performance</td><td>NCC giao hàng đúng hạn không?</td></tr>
+                <tr><td>Quality</td><td>Chất lượng có ổn định không?</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>External Analysis — Nhìn ra bên ngoài</h4>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Map toàn bộ Value Chain</div>
+                <p class="step-desc">Quy trình từ nguyên liệu thô → sản xuất → đóng gói → vận chuyển → đến tay mình.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Xác định Cost Driver</div>
+                <p class="step-desc">Khâu nào quyết định giá? Chiếm bao nhiêu %? → Xây Should Cost Model.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Tìm cơ hội</div>
+                <p class="step-desc">Xuyên suốt value chain, ở đâu có thể optimize cost hoặc chất lượng?</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Market Intelligence với AI</div>
+                <p class="step-desc">Dùng AI tổng hợp tin tức về sản phẩm, nguồn cung, giá thị trường, địa chính trị → filter thông tin quan trọng.</p>
+              </div>
+            </div>
+          </div>
+
+          <h3>12.2 · Sourcing — Từ strategy ra criteria</h3>
+          <p>Phân tích Category xong → tự nhiên ra được criteria để Sourcing NCC vì đã hiểu mình cần gì.</p>
+
+          <h3>12.3 · Negotiation — Give &amp; Take có chiến lược</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Câu hỏi</th><th>Ý nghĩa</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Mình có thể Give gì?</strong></td><td>Volume lớn hơn? Thanh toán nhanh? HĐ dài hạn? Visibility forecast?</td></tr>
+                <tr><td><strong>Mình muốn Take gì?</strong></td><td>Giá tốt hơn? Lead time ngắn hơn? Quality cao hơn? Flexibility?</td></tr>
+                <tr><td><strong>Ưu tiên của mình?</strong></td><td>Cái nào quan trọng nhất? Cái nào có thể nhượng?</td></tr>
+                <tr><td><strong>Mình Keep gì?</strong></td><td>Điều khoản không thể nhượng — bottom line.</td></tr>
+                <tr><td><strong>Mình Transfer gì?</strong></td><td>Điều khoản có thể linh hoạt để đổi thứ khác.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <blockquote>Negotiate không phải để thắng NCC — mà để tìm điểm cân bằng mà cả 2 bên đều muốn duy trì quan hệ lâu dài.</blockquote>
+
+          <h3>12.4 · Contract Management</h3>
+          <p>Legal review để đảm bảo hợp đồng đúng luật. Nhưng <strong>Procurement phải hiểu nội dung</strong> — biết điều khoản nào quan trọng, khi có tranh chấp phải tự mở HĐ tìm đúng điều khoản, không thể chờ Legal giải thích từng chữ.</p>
+
+          <h3>12.5 · Operations — Tư duy Why thay vì How</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Tình huống</th><th>Cách nghĩ thông thường</th><th>Cách nghĩ đúng</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Sếp yêu cầu báo cáo X</td><td>"Làm như thế nào?"</td><td>"Tại sao cần? Ai dùng? Quyết định gì?"</td></tr>
+                <tr><td>Stakeholder hỏi thông tin NCC</td><td>Cung cấp thông tin</td><td>"Họ hỏi để làm gì? Decision nào đang được đưa ra?"</td></tr>
+                <tr><td>Quy trình yêu cầu bước A</td><td>Làm bước A</td><td>"Tại sao bước A tồn tại? Có thể bỏ hoặc tối ưu?"</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>12.6 · Cost, Risk, &amp; Partnering</h3>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-accent">Cost</div>
+              <div class="card-title">Should Cost Model</div>
+              <p class="card-body">Hiểu chi phí từ gốc, không chỉ so sánh giá chào. Negotiate bằng dữ liệu, không cảm tính.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-amber">Risk</div>
+              <div class="card-title">Proactive Planning</div>
+              <p class="card-body">Dual sourcing, buffer stock cho critical material, điều khoản phạt, escalation plan.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Partnering</div>
+              <div class="card-title">2-way Communication</div>
+              <p class="card-body">Bridge NCC bên ngoài và stakeholder nội bộ. Giao tiếp kém = mất kiểm soát spend.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━ SESSION 2 ━━━━━━━━━━━━━━━ -->
+    <section class="session" id="session-2">
+      <div class="session-header">
+        <div class="tag">Vilas PE · Buổi 02</div>
+        <h1>Procurement Objectives<br>&amp; Responsibilities</h1>
+        <p class="lead">
+          Phân tích chuyên sâu vai trò chiến lược của Procurement — từ mục tiêu, cấu trúc tổ chức,
+          quản lý nhà cung cấp, upstream management với mô hình Tolling, cho đến bản đồ trưởng thành của chức năng Procurement.
+        </p>
+        <div class="meta-row">
+          <div class="meta-item"><strong>Trọng tâm:</strong> Structure · Segmentation · Upstream · Maturity</div>
+          <div class="meta-item"><strong>Thời lượng đọc:</strong> ~22 phút</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div class="toc-inline">
+          <div class="toc-inline-title">Trong buổi này</div>
+          <ol>
+            <li><a data-num="1." href="#s2-objectives">Procurement Objectives</a></li>
+            <li><a data-num="2." href="#s2-structure">Organizational Structure</a></li>
+            <li><a data-num="3." href="#s2-supplier">Supplier Management</a></li>
+            <li><a data-num="4." href="#s2-upstream">Upstream &amp; Tolling</a></li>
+            <li><a data-num="5." href="#s2-needwant">Need vs Want Framework</a></li>
+            <li><a data-num="6." href="#s2-maturity">Maturity Evolution</a></li>
+            <li><a data-num="7." href="#s2-competencies">Năng lực cốt lõi</a></li>
+          </ol>
+        </div>
+
+        <!-- CHAPTER 1 -->
+        <div class="chapter" id="s2-objectives">
+          <div class="chapter-label">Chương 1</div>
+          <h2 class="chapter-title">Procurement làm gì và tạo ra giá trị gì?</h2>
+
+          <p class="chapter-lead">Buổi 2 mở rộng bức tranh từ "mua hàng" sang vai trò chiến lược thực sự — <strong>người kết nối nội bộ với thị trường bên ngoài</strong>, mang công nghệ, đổi mới, và kiến thức ngành về cho doanh nghiệp.</p>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Core Mindset</span>
+            <p>Procurement là <strong>cầu nối thông tin hai chiều</strong>: đưa nhu cầu nội bộ ra ngoài cho NCC hiểu, và đưa công nghệ/đổi mới từ NCC vào cho các phòng ban.</p>
+          </div>
+
+          <h3>1.1 · Support Operational Requirements</h3>
+          <p>Đảm bảo dây chuyền vận hành không bị gián đoạn — đây là nền tảng cơ bản nhất. Nhưng trong tổ chức trưởng thành, đây chỉ là <em>"license to operate"</em> — điều kiện cần, không phải điều kiện đủ.</p>
+
+          <h3>1.2 · Manage Purchasing</h3>
+          <p>Kiểm soát toàn bộ vòng đời mua hàng — PR → PO → receipt → payment. Quan trọng là <strong>hiểu tại sao từng bước tồn tại</strong>, không thực thi mù quáng.</p>
+
+          <h3>1.3 · Supplier Management &amp; Segmentation</h3>
+          <p>Không phải NCC nào cũng cần đầu tư phát triển sâu. Procurement phải làm <strong>Supplier Segmentation</strong> để ưu tiên nguồn lực đúng chỗ.</p>
+
+          <div class="callout callout-blue">
+            <span class="callout-label">Tại sao phải Segment?</span>
+            <p>Nếu đối xử tất cả NCC như nhau — lãng phí thời gian vào tail supplier, thiếu focus vào strategic supplier. Segmentation giúp biết: <em>ai cần develop, ai chỉ cần giữ làm backup.</em></p>
+          </div>
+
+          <p>Framework phổ biến nhất là <a href="https://procurementtactics.com/kraljic-matrix/" target="_blank" class="kw">Kraljic Matrix</a> (1983), chia NCC theo 2 trục: spend impact và supply risk:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Segment</th><th>Spend</th><th>Risk</th><th>Chiến lược</th><th>Ví dụ</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Strategic</strong></td><td>Cao</td><td>Cao</td><td>Partnership sâu, co-develop</td><td>NCC lon nhôm cho Heineken</td></tr>
+                <tr><td><strong>Leverage</strong></td><td>Cao</td><td>Thấp</td><td>Cạnh tranh mạnh, consolidate</td><td>Bao bì tiêu chuẩn số lượng lớn</td></tr>
+                <tr><td><strong>Bottleneck</strong></td><td>Thấp</td><td>Cao</td><td>Dual source, buffer stock</td><td>Nguyên liệu đặc thù 1–2 NCC toàn cầu</td></tr>
+                <tr><td><strong>Tail</strong></td><td>Thấp</td><td>Thấp</td><td>Standardize, automate</td><td>Vật tư tiêu hao, dịch vụ nhỏ lẻ</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Ví dụ thực tế</div>
+            <p>Tail spend có 5 NCC khác nhau → Signal để <strong>consolidate xuống 1–2 NCC</strong>: giảm admin cost, giảm số PO, tăng leverage khi negotiate. Đơn giản nhưng cực hiệu quả trên scale lớn.</p>
+          </div>
+
+          <h3>1.4 · Kết nối Stakeholder với Key Supplier</h3>
+
+          <div class="example">
+            <div class="example-label">Case — DynaMark Printing</div>
+            <p>Pepsi tổ chức workshop với lãnh đạo các bộ phận + Strategic Vendor → NCC giới thiệu kỹ thuật in DynaMark cho lon bia Sài Gòn với họa tiết 63 tỉnh thành. Marketing không biết công nghệ này tồn tại, nhưng Procurement kết nối được.</p>
+          </div>
+
+          <div class="callout callout-green">
+            <span class="callout-label">Thực chiến</span>
+            <p>Muốn NCC ưu tiên hơn khách hàng khác? <strong>Chia sẻ forecast và roadmap dài hạn</strong>. NCC nhìn thấy tương lai ổn định → họ mở nhà máy gần, đầu tư R&D, giao JIT. Đây chính xác là điều Coca-Cola làm với NCC lon.</p>
+          </div>
+
+          <h3>1.5 · Align với Business Growth</h3>
+          <p>Sau khi đưa insight từ ngoài vào (outside-in), phải kiểm tra alignment với business. Ba chiều cần đánh giá:</p>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-blue">Growth</div>
+              <div class="card-title">Capacity của NCC</div>
+              <p class="card-body">NCC hiện tại có theo kịp tốc độ tăng trưởng của công ty? Nếu chạy full capacity, cần tìm thêm NCC dự phòng.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-purple">Innovation</div>
+              <div class="card-title">Công nghệ mới nhất</div>
+              <p class="card-body">NCC có đang optimize công nghệ? Lon mỏng hơn → giảm nhôm; lon lớn hơn → không fit line. Phải narrow down đúng.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">Sustainability</div>
+              <div class="card-title">ESG &amp; Scope 3</div>
+              <p class="card-body">EPR: doanh nghiệp sản xuất bắt buộc đảm bảo tái chế đầu ra. Scope 3 emissions từ supply chain ngày càng bị kiểm soát chặt.</p>
+            </div>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Case Study — Can to Can (Heineken)</div>
+            <p>Thay vì chỉ thực hiện nghĩa vụ tái chế một cách hình thức, Procurement kết nối <strong>Recycler</strong> với <strong>NCC Rolling</strong> (sản xuất tấm nhôm): Recycler tái chế nhôm cũ đúng spec của NCC Rolling → NCC Rolling dùng nhôm tái chế đó để sản xuất lon mới cho Heineken.</p>
+            <p>Kết quả: giảm carbon footprint, giảm chi phí nhôm nguyên sinh, tạo <strong>circular economy thực sự</strong> — không chỉ trên giấy.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 2 - STRUCTURE -->
+        <div class="chapter" id="s2-structure">
+          <div class="chapter-label">Chương 2</div>
+          <h2 class="chapter-title">Mua hàng được tổ chức như thế nào?</h2>
+
+          <p>Không có cấu trúc nào đúng tuyệt đối — phụ thuộc vào quy mô, ngành, mức độ trưởng thành, và chiến lược kinh doanh.</p>
+
+          <div class="struct-grid">
+            <div class="struct-card">
+              <div class="struct-header">Centralized</div>
+              <div class="struct-body">
+                <p>Toàn bộ mua hàng tập trung một phòng Procurement trung tâm.</p>
+                <ul>
+                  <li>Kiểm soát tốt, leverage cao</li>
+                  <li>Phù hợp quy mô lớn</li>
+                  <li>Heineken: Global làm Sourcing/Negotiation, local làm VE + input</li>
+                </ul>
+              </div>
+            </div>
+            <div class="struct-card">
+              <div class="struct-header">Decentralized</div>
+              <div class="struct-body">
+                <p>Không có phòng Procurement riêng — user/bộ phận tự xử lý.</p>
+                <ul>
+                  <li>Phù hợp startup, SME</li>
+                  <li>Nhanh nhưng thiếu kiểm soát</li>
+                  <li>Dễ mất leverage, khó track spend</li>
+                </ul>
+              </div>
+            </div>
+            <div class="struct-card">
+              <div class="struct-header">Hybrid ⭐</div>
+              <div class="struct-body">
+                <p>Kết hợp: có ngưỡng spending để phân luồng.</p>
+                <ul>
+                  <li>Low → User tự mua (AVL)</li>
+                  <li>Medium → Ops team</li>
+                  <li>High → Sourcing + Bidding</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3>Thách thức trong môi trường Centralized</h3>
+          <p>Khi Global đã làm hết Sourcing và Negotiation, team Local còn lại gì để làm?</p>
+
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Tập trung vào Value Engineering</div>
+                <p class="step-desc">Tìm cơ hội cải tiến spec, quy trình, design tại local market — những thứ Global không nhìn thấy vì xa thị trường.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Là Input cho Global</div>
+                <p class="step-desc">Giới thiệu NCC địa phương có năng lực. Cung cấp market intelligence về giá, regulatory, xu hướng địa phương.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Show Value một cách explicit</div>
+                <p class="step-desc">Proactively communicate: "Involve tôi vào thì bạn được gì?" — tạo credit cá nhân với stakeholder.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Nắm rõ Way of Working</div>
+                <p class="step-desc">Ranh giới quyền hạn rất quan trọng — làm lấn sang việc người khác mà không được authorize là ăn mail ngay.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 3 - SUPPLIER -->
+        <div class="chapter" id="s2-supplier">
+          <div class="chapter-label">Chương 3</div>
+          <h2 class="chapter-title">Supplier Management — Đối xử với NCC như thế nào?</h2>
+
+          <blockquote>Treat NCC như bộ phận nội bộ — không phải đối thủ, không phải vendor thuần túy.</blockquote>
+
+          <h3>Quarterly Business Review &amp; Drumbeat Meeting</h3>
+          <p>Thiết lập cadence họp định kỳ với NCC — thay vì chỉ liên hệ khi có vấn đề.</p>
+
+          <div class="pill-row">
+            <span class="pill">Phòng ngừa vấn đề sớm</span>
+            <span class="pill">Review performance 2 chiều</span>
+            <span class="pill">Share forecast &amp; roadmap</span>
+            <span class="pill">Build relationship dài hạn</span>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Best Practice</div>
+            <p>Team Planning chủ động book meeting với NCC về performance và allocation — không cần Procurement phải host tất cả. QAQC hai bên tự review với nhau. Procurement chỉ set framework và escalate khi cần. Đây là dấu hiệu của một supplier relationship trưởng thành.</p>
+          </div>
+
+          <h3>Specification Review — Nói được ngôn ngữ Technical</h3>
+          <p>Procurement không cần expert bằng team kỹ thuật. Nhưng phải hiểu đủ để:</p>
+
+          <ul class="numbered-list">
+            <li><strong>Đặt câu hỏi đúng</strong> — "Tại sao cần spec này? Nếu thay đổi thì ảnh hưởng gì?"</li>
+            <li><strong>Nhận ra cơ hội Value Engineering</strong> — spec nào đang overengineered so với thực tế?</li>
+            <li><strong>Communicate với NCC</strong> — không thể negotiate về kỹ thuật nếu không hiểu gì</li>
+            <li><strong>Bridge Technical &amp; Commercial</strong> — dịch requirement kỹ thuật thành điều khoản HĐ</li>
+          </ul>
+
+          <div class="callout callout-amber">
+            <span class="callout-label">Thực tế</span>
+            <p>Nếu mua bao bì, đi học thêm về printing process, material science. Nếu mua dịch vụ marketing, đi hiểu consumer insight, campaign funnel. Đầu tư vào kiến thức ngành = đầu tư vào influence của mình với stakeholder.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 4 - UPSTREAM -->
+        <div class="chapter" id="s2-upstream">
+          <div class="chapter-label">Chương 4</div>
+          <h2 class="chapter-title">Upstream Management &amp; Toll Manufacturing</h2>
+
+          <p class="chapter-lead">Một trong những phần advanced nhất của buổi học. Upstream management đang trở thành xu hướng do rủi ro địa chính trị và supply chain disruption tăng cao sau COVID-19, chiến tranh Mỹ-Trung, xung đột Ukraine.</p>
+
+          <h3>Tier Structure trong Supply Chain</h3>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Tier</th><th>Ví dụ (ngành lon)</th><th>Ai manage?</th><th>Rủi ro</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Tier 1</strong></td><td>NCC làm lon hoàn chỉnh → giao Pepsi/Heineken</td><td>Procurement trực tiếp</td><td>Đã visible</td></tr>
+                <tr><td><strong>Tier 2</strong></td><td>NCC Rolling sản xuất tấm nhôm cho Tier 1</td><td>Thường chưa manage</td><td>Ẩn, khó foresee</td></tr>
+                <tr><td><strong>Tier 3</strong></td><td>NCC sản xuất thỏi nhôm từ quặng / tái chế</td><td>Hầu như chưa manage</td><td>Rất ẩn, địa chính trị cao</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Xu hướng hiện tại: các công ty lớn đang extend tầm nhìn lên đến Tier 2–3 để <strong>foresee rủi ro sớm hơn</strong>, đặc biệt về nguyên liệu chiến lược (lithium, nhôm, đất hiếm).</p>
+
+          <h3>Mô hình Toll Manufacturing (Short Tolling)</h3>
+
+          <div class="callout callout-purple">
+            <span class="callout-label">Định nghĩa</span>
+            <p><strong>Toll Manufacturing:</strong> Khách hàng tự mua/quản lý NVL, đưa cho nhà máy để gia công. Nhà máy chỉ cung cấp máy móc, nhân công, quy trình — charge "tolling fee".</p>
+            <p>Ngược với <em>Contract Manufacturing</em> (nhà máy tự mua NVL + sản xuất + giao sản phẩm hoàn chỉnh).</p>
+          </div>
+
+          <div class="nw-grid">
+            <div class="nw-card need">
+              <div class="nw-card-title">Lợi ích Buyer</div>
+              <p>Kiểm soát trực tiếp giá NVL. Nếu deal được nhôm từ Tier 2/3 giá tốt hơn Tier 1 đang mua → capture toàn bộ savings. Transparency về cost structure. Bảo vệ IP (formula/spec).</p>
+            </div>
+            <div class="nw-card want">
+              <div class="nw-card-title">Lợi ích Tier 1</div>
+              <p>Không lo về NVL procurement → tập trung manufacturing excellence. Có thể apply mô hình cho nhiều khách hàng khác → tăng volume, optimize cost. Nếu Buyer offer thêm volume ở thị trường khác → deal cực hấp dẫn.</p>
+            </div>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Case tương tự trong Buổi 1 — Đường Úc (Pepsi)</div>
+            <p>Pepsi ký HĐ với Trader mua đường Úc, giao về Bonded Warehouse. Trader ký tiếp với NCC gia công tinh luyện ngay trong kho ngoại quan. Pepsi mở tờ khai nhập under quota. Toàn bộ quá trình tinh luyện diễn ra trong VN mà chưa chính thức nhập khẩu → tiết kiệm logistics và optimize thuế.</p>
+          </div>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Career Note</span>
+            <p>Search <strong>Upstream Procurement Manager</strong> trên LinkedIn — đây là role đang nổi lên rất nhanh, đặc biệt trong F&amp;B, Automotive, Electronics, Pharma.</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 5 - NEED WANT -->
+        <div class="chapter" id="s2-needwant">
+          <div class="chapter-label">Chương 5</div>
+          <h2 class="chapter-title">Need vs Want — Công cụ giải quyết vấn đề nhanh</h2>
+
+          <p>Khi stakeholder đến với requirement, Procurement phải phân biệt ngay:</p>
+
+          <div class="nw-grid">
+            <div class="nw-card need">
+              <div class="nw-card-title">NEED · Bất khả nhượng</div>
+              <p>Điều kiện thực sự cần để operation hoạt động. Nếu thiếu → ảnh hưởng production, quality, regulatory, safety. Không thỏa hiệp.</p>
+            </div>
+            <div class="nw-card want">
+              <div class="nw-card-title">WANT · Có thể điều chỉnh</div>
+              <p>Mong muốn nhưng có thể adjust về timing, spec, số lượng, format nếu có lý do. Đây là không gian Procurement tìm optimization.</p>
+            </div>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Ví dụ 1 — Giao hàng thứ Hai</div>
+            <p><strong>Stakeholder:</strong> "Cần giao hàng thứ Hai."</p>
+            <p><strong>Procurement:</strong> "Nhất thiết phải thứ Hai không? Thứ Ba có được không?" → Thứ Ba vẫn ok, chỉ là habit. → Mở option cho NCC linh hoạt hơn, đổi lấy giá tốt hơn hoặc lead time ngắn hơn.</p>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Ví dụ 2 — Lead Time 12 tuần</div>
+            <p><strong>NCC yêu cầu:</strong> Đặt PO trước 12 tuần.</p>
+            <p><strong>Procurement deep dive:</strong> Breakdown 12 tuần: confirm tổng nhu cầu → confirm chi tiết SKU → gửi Artwork → sản xuất → logistics. Hóa ra bước 1-2 có thể làm song song → thực tế chỉ cần 8 tuần.</p>
+            <p><strong>Bonus:</strong> Nếu stakeholder đặt PO rồi cancel → NCC charge surcharge. Procurement phải tính và đưa vào bức tranh tổng để stakeholder biết mà plan đúng timeline.</p>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-label">Why Mindset</span>
+            <p>Need vs Want là công cụ, nhưng foundation là luôn hỏi <strong>"Tại sao requirement này tồn tại?"</strong>. Hiểu root cause → mới tìm được giải pháp sáng tạo. Stakeholder nói "muốn" ≠ thực sự "cần".</p>
+          </div>
+        </div>
+
+        <!-- CHAPTER 6 - MATURITY -->
+        <div class="chapter" id="s2-maturity">
+          <div class="chapter-label">Chương 6</div>
+          <h2 class="chapter-title">Procurement Maturity — Từ người mua hàng đến Enabler</h2>
+
+          <p>Model trưởng thành cho thấy Procurement tiến hóa theo quy mô và nhận thức của tổ chức:</p>
+
+          <div class="maturity-ladder">
+            <div class="maturity-rung">
+              <div class="maturity-level" style="color:#94907F">
+                <div class="maturity-dot" style="background:#D3D1C7"></div>
+                Primitive
+              </div>
+              <div class="maturity-content">
+                <div class="maturity-name">Không có phòng Procurement riêng</div>
+                <p class="maturity-desc">Mua hàng nằm rải rác trong Finance, Ops, Logistics. Không quy trình chuẩn, không KPI. Procurement chỉ là tên gọi, không phải chức năng.</p>
+              </div>
+            </div>
+            <div class="maturity-rung">
+              <div class="maturity-level" style="color:#8A5A0D">
+                <div class="maturity-dot" style="background:#EFD080"></div>
+                Basic
+              </div>
+              <div class="maturity-content">
+                <div class="maturity-name">Stand-alone, scope hạn chế</div>
+                <p class="maturity-desc">Có phòng Procurement nhưng chỉ làm một số mặt hàng — category khác vẫn do End-user manage. Chủ yếu xử lý giao dịch.</p>
+              </div>
+            </div>
+            <div class="maturity-rung">
+              <div class="maturity-level" style="color:#1E5A94">
+                <div class="maturity-dot" style="background:#AECFEF"></div>
+                Improving
+              </div>
+              <div class="maturity-content">
+                <div class="maturity-name">Centralized, focus cost &amp; risk</div>
+                <p class="maturity-desc">Nhận ra giá trị centralize spend → Centralize về Procurement. Bắt đầu có Supplier Segmentation, Category Management cơ bản. KPI chủ yếu là Cost Savings.</p>
+              </div>
+            </div>
+            <div class="maturity-rung">
+              <div class="maturity-level" style="color:#2F6B3D">
+                <div class="maturity-dot" style="background:#A9D4B6"></div>
+                Pioneering
+              </div>
+              <div class="maturity-content">
+                <div class="maturity-name">Cross-functional, involve strategy</div>
+                <p class="maturity-desc">Không chỉ nhận demand rồi mua — thực sự tham gia cross-functional project, NPD, ESG initiative. Được xem là partner, không service provider.</p>
+              </div>
+            </div>
+            <div class="maturity-rung">
+              <div class="maturity-level" style="color:#C94F1E">
+                <div class="maturity-dot" style="background:#F2C4A8"></div>
+                World-class
+              </div>
+              <div class="maturity-content">
+                <div class="maturity-name">Enabler đẩy tăng trưởng</div>
+                <p class="maturity-desc">Từng Buyer là Value Creator. Procurement tích hợp hoàn toàn với enterprise planning, dùng advanced analytics, quản lý upstream. Đây là competitive advantage thực sự của công ty.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Thực tế ngành</span>
+            <p>Theo The Hackett Group, chỉ khoảng <strong>15% tổ chức</strong> đạt World-class. World-class procurement có thể influence hoặc quản lý nhiều hơn <strong>20% spend</strong> so với trung bình.</p>
+          </div>
+
+          <h3>Bước nhảy quan trọng: Buyer → Value Creator</h3>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Buyer (Cũ)</th><th>Value Creator (Mới)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Nhận yêu cầu → tìm NCC → mua → xong</td><td>Hiểu business context → anticipate nhu cầu → tạo giải pháp</td></tr>
+                <tr><td>Tập trung giá rẻ nhất</td><td>Tối ưu TCO, value engineering</td></tr>
+                <tr><td>NCC là đối tác giao dịch</td><td>NCC là nguồn innovation, kiến thức</td></tr>
+                <tr><td>Reactive — chờ vấn đề xảy ra</td><td>Proactive — foresee rủi ro, chuẩn bị trước</td></tr>
+                <tr><td>Chỉ làm trong scope</td><td>Cross-functional, là bridge giữa các phòng</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CHAPTER 7 - COMPETENCIES -->
+        <div class="chapter" id="s2-competencies">
+          <div class="chapter-label">Chương 7</div>
+          <h2 class="chapter-title">Năng lực cốt lõi cần xây dựng</h2>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-accent">Technical</div>
+              <div class="card-title">Category Expertise</div>
+              <p class="card-body">Hiểu sâu về sản phẩm/dịch vụ mua — value chain, cost driver, market dynamics. Ít nhất đủ để "nói ngôn ngữ" của Technical team.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Analytical</div>
+              <div class="card-title">Should Cost Modeling</div>
+              <p class="card-body">Xây được cost model từ raw material → manufacturing → logistics → margin. Negotiate từ vị thế có data.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-purple">Strategic</div>
+              <div class="card-title">Supplier Segmentation</div>
+              <p class="card-body">Dùng Kraljic Matrix để phân nhóm NCC và xây strategy phù hợp cho từng nhóm.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">Interpersonal</div>
+              <div class="card-title">Stakeholder Management</div>
+              <p class="card-body">Build relationship với internal stakeholder, hiểu KPI của họ, anticipate nhu cầu. Trở thành Trusted Advisor.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-amber">Commercial</div>
+              <div class="card-title">Contract &amp; Risk</div>
+              <p class="card-body">Hiểu các điều khoản HĐ quan trọng. Tự bảo vệ quyền lợi mà không chờ Legal giải thích từng chữ.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Operational</div>
+              <div class="card-title">Process Optimization</div>
+              <p class="card-body">Luôn hỏi "Tại sao bước này tồn tại?" — tìm cơ hội rút ngắn lead time, automate để focus vào high-value work.</p>
+            </div>
+          </div>
+
+          <h3>Bản đồ phát triển cá nhân</h3>
+
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">→</div>
+              <div class="step-body">
+                <div class="step-title">Master category của mình trước</div>
+                <p class="step-desc">Dành 20% thời gian đọc industry report, theo dõi commodity price, tìm hiểu manufacturing process. LinkedIn + ISM resources là điểm bắt đầu tốt.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">→</div>
+              <div class="step-body">
+                <div class="step-title">Build Should Cost Model cho 1 item quan trọng</div>
+                <p class="step-desc">Ngay cả model đơn giản (raw material + labor + overhead + margin) cũng cho leverage lớn trong negotiation.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">→</div>
+              <div class="step-body">
+                <div class="step-title">Đề xuất một Supplier Workshop</div>
+                <p class="step-desc">Meeting nhỏ với key supplier để share business direction cũng tạo ra differentiation. NCC nhớ mình vì là người duy nhất làm điều đó.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">→</div>
+              <div class="step-body">
+                <div class="step-title">Tạo visibility cho value mang lại</div>
+                <p class="step-desc">Document savings, innovations, risks avoided. Procurement invisible = bị cắt budget. Procurement visible = được đầu tư thêm.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-ornament">· · ·</div>
+
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━ SESSION 3 ━━━━━━━━━━━━━━━ -->
+    <section class="session" id="session-3">
+      <div class="session-header">
+        <div class="tag">Vilas PE · Buổi 03</div>
+        <h1>Procurement Category<br>&amp; Category Management</h1>
+        <p class="lead">
+          Phân loại toàn bộ danh mục mua hàng (Direct vs Indirect), quy trình Category Management Playbook 8 bước,
+          phân tích internal data chuyên sâu, và ISM Skill #1 — Business Acumen: nền tảng của mọi kỹ năng còn lại.
+        </p>
+        <div class="meta-row">
+          <div class="meta-item"><strong>Trọng tâm:</strong> Category · Spend Analysis · Stakeholder · Business Acumen</div>
+          <div class="meta-item"><strong>Thời lượng đọc:</strong> ~25 phút</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div class="toc-inline">
+          <div class="toc-inline-title">Trong buổi này</div>
+          <ol>
+            <li><a data-num="1." href="#s3-category">Procurement Category — Direct vs Indirect</a></li>
+            <li><a data-num="2." href="#s3-direct">Direct Materials chi tiết</a></li>
+            <li><a data-num="3." href="#s3-indirect">Indirect Materials chi tiết</a></li>
+            <li><a data-num="4." href="#s3-playbook">Category Management Playbook</a></li>
+            <li><a data-num="5." href="#s3-prep">Step 1 — Preparation</a></li>
+            <li><a data-num="6." href="#s3-internal">Step 2 — Internal Analysis</a></li>
+            <li><a data-num="7." href="#s3-external">Step 3 — External Analysis</a></li>
+            <li><a data-num="8." href="#s3-spend">Spend Cube &amp; Spend Tree</a></li>
+            <li><a data-num="9." href="#s3-supplier-analysis">Supplier Analysis</a></li>
+          </ol>
+        </div>
+
+        <div class="chapter" id="s3-category">
+          <div class="chapter-label">Chương 1</div>
+          <h2 class="chapter-title">Procurement Category — Direct vs Indirect</h2>
+          <p class="chapter-lead">Trong một công ty sản xuất, toàn bộ chi tiêu của Procurement chia thành hai nhánh lớn: <strong>Direct</strong> (nguyên vật liệu đầu vào tạo ra sản phẩm) và <strong>Indirect</strong> (mọi thứ còn lại giúp công ty vận hành).</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nhánh</th><th>Sub-category</th><th>Ví dụ thực tế</th><th>Đặc điểm</th></tr></thead>
+              <tbody>
+                <tr><td rowspan="3"><strong>Direct</strong></td><td>Raw Materials</td><td>Đường, cà phê, lúa mạch, cacao, nhôm</td><td>Commodity — giá theo thị trường thế giới</td></tr>
+                <tr><td>Packaging — Primary</td><td>Lon, chai — tiếp xúc trực tiếp sản phẩm</td><td>Spec kỹ thuật rất cao, critical quality</td></tr>
+                <tr><td>Packaging — Secondary</td><td>Carton, label, print film (bao bên ngoài)</td><td>Volume lớn, nhiều NCC hơn</td></tr>
+                <tr><td rowspan="5"><strong>Indirect</strong></td><td>CAPEX &amp; MRO</td><td>Máy móc dây chuyền, spare part, bu lông ốc vít</td><td>Phụ tùng khó standardize spec</td></tr>
+                <tr><td>Business Services</td><td>HR, IT (laptop), đồng phục, training, system</td><td>Daily ops support — dịch vụ liên quan nhân công</td></tr>
+                <tr><td>Logistics</td><td>Freight forwarding, XNK, kho bãi (Domestic)</td><td>International + Domestic logistics</td></tr>
+                <tr><td>Commerce (S&amp;M)</td><td>ATL, BTL, POSM</td><td>Agency, activation, vật phẩm quảng cáo</td></tr>
+                <tr><td>Semi-finished / Finished</td><td>Retail: mua hàng để bán lại (Merchandise)</td><td>Procurement = Merchandising trong retail</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout callout-accent">
+            <span class="callout-label">Career Insight</span>
+            <p><strong>Job về Direct</strong> thường ghi rõ ưu tiên biết mua Đường hay mua Lon — vì mỗi nguyên liệu có một value chain riêng hoàn toàn khác nhau. Không thể "biết chung chung".</p>
+            <p><strong>Job về Indirect</strong> thì dễ hơn ở chỗ không nhất thiết phải hiểu sâu value chain một sản phẩm cụ thể — kiến thức chung chung hơn, apply được rộng hơn giữa các ngành.</p>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-direct">
+          <div class="chapter-label">Chương 2</div>
+          <h2 class="chapter-title">Direct Materials — Nguyên liệu tạo ra sản phẩm</h2>
+          <h3>Raw Materials — Hàng hóa cơ bản</h3>
+          <p>Gồm: đường, cà phê, lúa mạch, cacao, nhôm (thỏi), và các chất phụ gia, chemical.</p>
+          <div class="callout callout-blue">
+            <span class="callout-label">Đặc điểm quan trọng</span>
+            <p>Raw Materials là <strong>Commodities</strong> — giá được định bởi <a href="https://www.czapp.com/explainers/the-sugar-futures-contracts/" target="_blank" class="kw">sàn giao dịch quốc tế</a>, không phải NCC. Ví dụ: đường có 2 sàn là <strong>London</strong> (Sugar No.5, trên ICE Europe) và <strong>New York</strong> (Sugar No.11, trên ICE US). Procurement cần biết giao dịch bằng <a href="https://vespertool.com/knowledge-hub/sugar/types-of-data/futures/" target="_blank" class="kw">Future contract</a> — mua/bán quyền mua hàng hóa ở mức giá cố định trong tương lai để quản lý rủi ro biến động giá.</p>
+          </div>
+          <div class="example">
+            <div class="example-label">Commodities Risk Management</div>
+            <p>Trong các tập đoàn lớn (Pepsi, Heineken, Nestlé), có một team chuyên về <a href="https://www.investopedia.com/terms/c/commodityrisk.asp" target="_blank" class="kw">Commodities Risk Management</a> — phân tích thị trường, ra quyết định <a href="https://vespertool.com/knowledge-hub/sugar/types-of-data/futures/" target="_blank" class="kw">hedging</a> (dùng Future contract để lock giá), giúp công ty tránh bị ảnh hưởng khi giá nguyên liệu tăng đột biến.</p>
+            <p>Ví dụ: Nếu dự báo giá đường tăng 20% trong 6 tháng tới, team này sẽ mua Future contract ngay bây giờ để lock giá hiện tại cho toàn bộ nhu cầu 6 tháng.</p>
+          </div>
+          <h3>Packaging — Primary vs Secondary</h3>
+          <div class="nw-grid">
+            <div class="nw-card need">
+              <div class="nw-card-title">Primary Packaging</div>
+              <p>Tiếp xúc trực tiếp với sản phẩm: lon nhôm, chai thủy tinh/nhựa, túi đựng. Spec kỹ thuật cực kỳ chặt (thực phẩm tiếp xúc, áp suất, food-grade). Critical về quality — lỗi ở đây = recall toàn bộ lô hàng.</p>
+            </div>
+            <div class="nw-card want">
+              <div class="nw-card-title">Secondary Packaging</div>
+              <p>Bao bên ngoài, không tiếp xúc sản phẩm: carton thùng, label nhãn, print film co. Volume lớn hơn Primary, nhiều NCC hơn, có nhiều cơ hội Value Engineering về design và vật liệu.</p>
+            </div>
+          </div>
+          <div class="callout callout-green">
+            <span class="callout-label">Tại sao Direct dễ làm Global hơn?</span>
+            <p>Direct spending rất lớn + spec rất cụ thể → <strong>dễ standardize để centralize</strong> về Global Procurement. Opportunities nhiều hơn vì volume lớn = leverage lớn khi negotiate. Mỗi mặt hàng có <strong>value chain riêng</strong> — người mua lon cần hiểu công nghệ sản xuất lon khác hoàn toàn người mua đường.</p>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-indirect">
+          <div class="chapter-label">Chương 3</div>
+          <h2 class="chapter-title">Indirect Materials — Mua hàng để vận hành</h2>
+          <h3>CAPEX &amp; MRO</h3>
+          <ul class="numbered-list">
+            <li><strong>CAPEX</strong> (Capital Expenditure): Mua dây chuyền sản xuất mới, thiết bị lớn, xây dựng cơ sở hạ tầng — thường là dự án một lần, giá trị lớn.</li>
+            <li><strong>MRO</strong> (Maintenance, Repair &amp; Operations): Spare part, bu lông ốc vít, vật tư bảo trì máy móc — mua thường xuyên, giá trị nhỏ nhưng volume cao.</li>
+          </ul>
+          <div class="callout callout-amber">
+            <span class="callout-label">Thách thức của MRO</span>
+            <p>Phụ tùng rất khó standardize spec — trừ khi NCC là OEM lớn (gốc của nhà máy). Mỗi máy có spec khác nhau từ nhà sản xuất khác nhau → khó consolidate NCC.</p>
+          </div>
+          <h3>Business Services</h3>
+          <p>Team chuyên mua các hoạt động dịch vụ trong công ty liên quan các phòng ban:</p>
+          <div class="pill-row">
+            <span class="pill">HR — tuyển dụng, training</span>
+            <span class="pill">IT — laptop, software, system</span>
+            <span class="pill">Đồng phục, bảo hộ lao động</span>
+            <span class="pill">Dịch vụ vệ sinh, bảo vệ</span>
+            <span class="pill">Facilities management</span>
+          </div>
+          <p>Thách thức: Dịch vụ khó xây dựng SLA và rate card vì liên quan đến <strong>nhân công tại từng thị trường</strong> — rất khó standardize global.</p>
+          <h3>Commerce (Sales &amp; Marketing)</h3>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-purple">ATL</div>
+              <div class="card-title">Above The Line</div>
+              <p class="card-body">Mua dịch vụ Agency để thực hiện chiến dịch campaign quảng cáo — TV, digital, OOH. Giá trị lớn, ít NCC chuyên nghiệp.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">BTL</div>
+              <div class="card-title">Below The Line</div>
+              <p class="card-body">Hoạt động thực hiện tại điểm bán: Activation, trial sản phẩm, promoter. Nhiều NCC nhỏ, địa lý phân tán.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">POSM</div>
+              <div class="card-title">Point of Sale Materials</div>
+              <p class="card-body">Vật phẩm làm quà tặng, vật dụng display tại điểm bán để support tăng sale. Volume lớn, seasonal theo campaign.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-playbook">
+          <div class="chapter-label">Chương 4</div>
+          <h2 class="chapter-title">Category Management Playbook — 8 bước</h2>
+          <p class="chapter-lead">Category Management không phải chỉ là "define needs rồi sourcing". Phải go further: hiểu, link các kiểu, combine với needs rồi đưa ra <strong>portfolio hoàn chỉnh về category</strong>.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Stage</th><th>Output chính</th><th>Tools / Methods</th></tr></thead>
+              <tbody>
+                <tr style="background:var(--accent-soft)"><td><strong>1</strong></td><td><strong>Preparation</strong></td><td>Scope, team, stakeholder map</td><td>RACI, Stakeholder matrix (Influence/Interest)</td></tr>
+                <tr style="background:var(--accent-soft)"><td><strong>2</strong></td><td><strong>Internal Analysis</strong></td><td>Spend profile, supplier base, contract coverage</td><td>Spend Cube, Spend Tree, Pareto analysis</td></tr>
+                <tr style="background:var(--accent-soft)"><td><strong>3</strong></td><td><strong>External Analysis</strong></td><td>Market dynamics, cost driver, supplier power</td><td><a href="https://www.investopedia.com/terms/p/porter.asp" target="_blank" class="kw">Porter's Five Forces</a>, <a href="https://www.investopedia.com/terms/s/swot.asp" target="_blank" class="kw">SWOT</a>, PESTLE, Value Chain</td></tr>
+                <tr style="background:var(--accent-soft)"><td><strong>4</strong></td><td><strong>Category Strategy Development</strong></td><td>Portfolio strategy, sourcing options</td><td><a href="https://procurementtactics.com/kraljic-matrix/" target="_blank" class="kw">Kraljic Matrix</a>, Supplier Perception Model</td></tr>
+                <tr><td><strong>5</strong></td><td>Sourcing</td><td>Qualified supplier list, RFP/RFQ results</td><td>Market test, eAuction, competitive bidding</td></tr>
+                <tr><td><strong>6</strong></td><td>Negotiation &amp; Contract</td><td>Signed contract, agreed terms</td><td>Negotiation strategy, contract templates</td></tr>
+                <tr><td><strong>7</strong></td><td>SRM</td><td>Supplier scorecard, relationship plan</td><td>Supplier scorecards, QBR framework</td></tr>
+                <tr><td><strong>8</strong></td><td>Performance &amp; Continuous Improvement</td><td>KPI dashboard, improvement roadmap</td><td>Balanced scorecard, Kaizen</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout callout-blue">
+            <span class="callout-label">Trọng tâm buổi học</span>
+            <p>Buổi 3 tập trung vào <strong>4 step đầu</strong> — Preparation, Internal Analysis, External Analysis, và Category Strategy. Đây là phần nền tảng nhất, quyết định toàn bộ chất lượng của process phía sau.</p>
+            <p>Output tổng hợp: <strong>Portfolio Strategy Template</strong> — một file dùng liên tục hằng năm, thay vì làm lại từ đầu.</p>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-prep">
+          <div class="chapter-label">Chương 5</div>
+          <h2 class="chapter-title">Step 1 — Preparation: Định nghĩa trước khi làm</h2>
+          <p>Preparation gồm 3 hoạt động cốt lõi: <strong>Category Alignment</strong>, <strong>Build the Team</strong>, và <strong>Stakeholder Engagement</strong>.</p>
+          <h3>5.1 · Category Alignment — Define scope</h3>
+          <p>Trước khi làm bất cứ việc gì, phải clear ra category của mình <strong>manage cái gì</strong>.</p>
+          <div class="example">
+            <div class="example-label">Ví dụ — Category là lon</div>
+            <p>Phải define rõ: Quản lý bao nhiêu loại lon? Bao nhiêu nhà máy? Scope nội địa hay global? Có cần quản lý cả upstream (tấm nhôm) không?</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dimension</th><th>Ví dụ cho category Packaging</th><th>Mục đích</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Sub-category in scope</strong></td><td>Packaging → sub là Carton, Label (KHÔNG bao gồm lon)</td><td>Tránh overlap với category manager khác</td></tr>
+                <tr><td><strong>Region / Business Units</strong></td><td>Global hay chỉ VN? Tất cả BU hay chỉ FMCG?</td><td>Xác định ai là stakeholder liên quan</td></tr>
+                <tr><td><strong>Spend level coverage</strong></td><td>Cover toàn bộ spend, hay có end-user tự buy?</td><td>Biết spend thực sự mình control là bao nhiêu</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>5.2 · Build the Team — Cross-functional là bắt buộc</h3>
+          <div class="callout callout-accent">
+            <span class="callout-label">Tại sao phải Cross-functional?</span>
+            <p>Output của Category Management là <strong>action</strong>. Muốn take action thì phải cross-align với các bộ phận khác. Mình chỉ có thể get input từ data (giá), nhưng chất lượng thì phải nhờ QAQC, capacity planning thì phải nhờ Production.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Thành viên</th><th>Lý do cần có trong team</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Key Procurement people</strong></td><td>Người execute category plan — core team</td></tr>
+                <tr><td><strong>Requestors / End-users</strong></td><td>Người dùng sản phẩm/dịch vụ — biết quality thực tế</td></tr>
+                <tr><td><strong>Management / Decision makers</strong></td><td>Approve budget, resolve escalation nhanh</td></tr>
+                <tr><td><strong>Finance</strong></td><td>Budget control, P&amp;L impact analysis</td></tr>
+                <tr><td><strong>Technical / QAQC</strong></td><td>Verify spec, đánh giá chất lượng NCC</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>5.3 · Stakeholder Engagement — RACI + Influence/Interest Matrix</h3>
+          <h4>Lớp 1 — RACI Matrix</h4>
+          <p>Phân công rõ ràng: ai <strong>R</strong>esponsible (làm), ai <strong>A</strong>ccountable (chịu trách nhiệm kết quả), ai <strong>C</strong>onsulted (hỏi ý kiến), ai <strong>I</strong>nformed (cần biết). Xem thêm: <a href="https://www.teamgantt.com/blog/raci-chart-definition-tips-and-example" target="_blank" class="kw">RACI Matrix guide</a>.</p>
+          <h4>Lớp 2 — Influence × Interest Matrix</h4>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-accent">Manage Closely</div>
+              <div class="card-title">Influence cao, Interest cao</div>
+              <p class="card-body">Quản lý sát nhất — invite vào governance/decision making. Communication: 1-1 meeting thường xuyên. Ví dụ: Giám đốc Production, CFO.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-amber">Keep Satisfied</div>
+              <div class="card-title">Influence cao, Interest thấp</div>
+              <p class="card-body">Bạn nắm overall chứ không cần detail. Chuẩn bị đủ info những gì họ quan tâm. Communication: Workshop participant. Ví dụ: BOD, CEO.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Keep Informed</div>
+              <div class="card-title">Influence thấp, Interest cao</div>
+              <p class="card-body">Cập nhật chủ đề họ quan tâm. Communication: Team meeting, 1:1 email. Ví dụ: User department managers.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">Monitor</div>
+              <div class="card-title">Influence thấp, Interest thấp</div>
+              <p class="card-body">Tốn ít effort nhất. Communication: Group email, newsletter. Không cần meeting riêng.</p>
+            </div>
+          </div>
+          <div class="callout callout-purple">
+            <span class="callout-label">Factors đánh giá Influence &amp; Interest</span>
+            <p><strong>Influence:</strong> Seniority · Delivery responsibility · Budget approval · Technical knowledge · Expertise</p>
+            <p><strong>Interest:</strong> Impact lên họ · Time availability · Opinion về Procurement function · Ease factor</p>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-internal">
+          <div class="chapter-label">Chương 6</div>
+          <h2 class="chapter-title">Step 2 — Internal Analysis: Hiểu sâu dữ liệu nội bộ</h2>
+          <p class="chapter-lead">Internal Analysis là phần <strong>sensitive</strong> — thuần data nội bộ công ty. Nhưng đây là nền tảng để pop-up ideas chiến lược.</p>
+          <div class="callout callout-accent">
+            <span class="callout-label">Nguyên tắc đọc data</span>
+            <p>Luôn nhìn <strong>rộng trước → zoom in sau</strong>. Bắt đầu từ tổng thể để biết đâu là chỗ đáng đào sâu.</p>
+          </div>
+          <h3>5 trụ cột của Internal Analysis</h3>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Portfolio Spending — Nhìn tổng quan spend</div>
+                <p class="step-desc">Benchmark category spending của mình với <strong>TOTAL spending trên 1 bậc</strong> (không so với total procurement). Ví dụ: lon nhôm chiếm bao nhiêu % Total Packaging Spending — không so với % Total Procurement. Xem YoY trend và check align với business không.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Supply Base &amp; Performance</div>
+                <p class="step-desc">Đang có bao nhiêu NCC? Overall performance qua các năm ra sao? Zoom vào từng NCC: delivery, quality, responsiveness.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title"><a href="https://procurementandsupply.com/supplier-segmentation-using-the-kraljic-matrix/" target="_blank" class="kw">Supplier Allocation</a> — Phân bổ volume có đều không?</div>
+                <p class="step-desc">Volume bị tập trung lệch về 1 phía → rủi ro phụ thuộc. Ví dụ: Gạo có 3 NCC nhưng 2 ở miền Trung → miền Nam/Bắc bị underserved. Từ đó xem cần consolidate hay diversify.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Supplier Price — Giá có đi đúng hướng?</div>
+                <p class="step-desc">Volume cho NCC tăng mà NCC lại tăng giá → sai lầm. Phải tạo exit plan hoặc train challenger NCC để tạo áp lực cạnh tranh.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title">Qualitative Analysis — Phỏng vấn stakeholder</div>
+                <p class="step-desc">Hỏi team Planning mới phát hiện: 1 Silo chứa 1 loại gạo, nhà máy có 3 Silo → chỉ chứa được 3 loại gạo từ 3 NCC. Nếu có hơn 3 NCC → phải plan lead time xoay vòng → phức tạp hơn tưởng. Data không thể hiện được điều này.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-external">
+          <div class="chapter-label">Chương 7</div>
+          <h2 class="chapter-title">Step 3 — External Analysis: Hiểu thị trường bên ngoài</h2>
+          <p>External Analysis trả lời câu hỏi: <em>thị trường NCC đang ở đâu, và mình đang ở vị thế nào với tư cách là buyer?</em></p>
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Map Value Chain của sản phẩm</div>
+                <p class="step-desc">Truy ngược từ sản phẩm mình mua về đến nguyên liệu thô. Mỗi bước: ai làm, chi phí chiếm bao nhiêu %? → Build Should Cost Model.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Phân tích thị trường NCC — Five Forces + SWOT</div>
+                <p class="step-desc">Trên thị trường có những NCC nào? Power của họ như thế nào? Có monopoly không? Dùng <a href="https://www.investopedia.com/terms/p/porter.asp" target="_blank" class="kw">Porter's Five Forces</a> để đánh giá. <a href="https://www.investopedia.com/terms/s/swot.asp" target="_blank" class="kw">SWOT</a> để biết mình đứng ở đâu với tư cách buyer.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Category Strategy — Kết hợp Kraljic + Supplier Perception</div>
+                <p class="step-desc"><a href="https://procurementtactics.com/kraljic-matrix/" target="_blank" class="kw">Supplier Positioning (Kraljic Matrix)</a>: Coi supplier ở vị thế nào? <strong>Supplier Perception:</strong> Dưới góc nhìn của Supplier, họ nhìn mình như thế nào? Từ 2 góc nhìn đó mới đưa ra strategy phù hợp.</p>
+              </div>
+            </div>
+          </div>
+          <div class="callout callout-blue">
+            <span class="callout-label">Supplier Perception — Góc nhìn ngược quan trọng</span>
+            <p>Nếu mày là khách hàng nhỏ với NCC lớn → NCC không care → strategy phải là "làm thế nào để trở thành priority customer". Nếu mày là khách hàng lớn nhất của NCC nhỏ → NCC phụ thuộc hoàn toàn → risk nếu NCC fail.</p>
+          </div>
+        </div>
+
+        <div class="chapter" id="s3-spend">
+          <div class="chapter-label">Chương 8 · Deep Dive</div>
+          <h2 class="chapter-title"><a href="https://procurementtactics.com/spend-cube-analysis/" target="_blank" class="kw">Spend Cube</a> &amp; Spend Tree — Từ dữ liệu thô đến quyết định chiến lược</h2>
+
+          <p class="chapter-lead">Đây không phải là công cụ để "có vẻ chuyên nghiệp" — đây là cách Procurement biến một đống PO data thành insight thực sự, dẫn đến savings cụ thể và quyết định dựa trên bằng chứng.</p>
+
+          <!-- ── SPEND CUBE ── -->
+          <h3>Phần A · Spend Cube — "Ai mua gì từ đâu"</h3>
+
+          <p><strong>Spend Cube</strong> trả lời một câu hỏi trung tâm: <em>"Ai trong công ty mình (Business Unit) đang mua Cái gì (Category) từ Ai (Supplier) — và bao nhiêu tiền?"</em></p>
+
+          <p>Ba trục của Cube:</p>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-tag tag-accent">Trục X — Supplier</div>
+              <div class="card-title">Mua từ đâu?</div>
+              <p class="card-body">Nhìn spending theo từng NCC. Ai đang nhận nhiều tiền nhất? Ai bị phân tán quá mức? NCC nào đang có parent-child relationship mà mày chưa biết?</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-blue">Trục Y — Category</div>
+              <div class="card-title">Mua cái gì?</div>
+              <p class="card-body">Spending theo nhóm hàng hóa từ tổng xuống chi tiết. Organise vào source-able buckets để so sánh được giữa các BU và theo thời gian.</p>
+            </div>
+            <div class="card">
+              <div class="card-tag tag-green">Trục Z — Business Unit</div>
+              <div class="card-title">Ai đang mua?</div>
+              <p class="card-body">Spending theo BU / Region / Department. Ai đang spend nhiều nhất? BU nào đang mua cùng 1 thứ nhưng từ các NCC khác nhau?</p>
+            </div>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-label">Cách "slice" Cube — đặt đúng câu hỏi</span>
+            <p>Spend Cube có giá trị ở chỗ mày có thể "cắt" nó theo bất kỳ hướng nào. Ví dụ phân tích IT software (Category) × European offices (BU) × Enterprise vendors (Supplier) có thể reveal ra: 3 văn phòng đang mua cùng 1 phần mềm từ 3 NCC khác nhau → cơ hội consolidate license ngay lập tức.</p>
+          </div>
+
+          <!-- BIG WORKED EXAMPLE -->
+          <h3>Ví dụ thực chiến — Công ty FMCG A (Quy mô ~500 tỷ/năm Indirect spend)</h3>
+
+          <p>Giả sử mày là Indirect Procurement Manager tại một công ty FMCG. Sau khi collect 2 năm data và build Spend Cube, đây là những gì mày thấy:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Category</th><th>Total Spend 2023</th><th>Số NCC</th><th>% có contract</th><th>Top NCC chiếm</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>IT (laptop, software)</td><td>45 tỷ</td><td>23</td><td>38%</td><td>62% spend</td></tr>
+                <tr style="background:var(--accent-soft)"><td><strong>POSM (quà tặng, display)</strong></td><td>38 tỷ</td><td><strong>67</strong></td><td><strong>12%</strong></td><td>34% spend</td></tr>
+                <tr><td>Logistics (vận tải nội địa)</td><td>72 tỷ</td><td>8</td><td>90%</td><td>71% spend</td></tr>
+                <tr style="background:var(--accent-soft)"><td><strong>MRO (spare part)</strong></td><td>28 tỷ</td><td><strong>112</strong></td><td><strong>5%</strong></td><td>28% spend</td></tr>
+                <tr><td>Business Services (training, đồng phục)</td><td>31 tỷ</td><td>19</td><td>55%</td><td>48% spend</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Nhìn vào bảng trên — ngay lập tức hai dòng highlight đỏ bắt mắt. Đây là những gì Spend Cube đang nói với mày:</p>
+
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">!</div>
+              <div class="step-body">
+                <div class="step-title">POSM: 67 NCC, contract coverage chỉ 12% — Classic fragmentation</div>
+                <p class="step-desc">38 tỷ đồng mà có tới 67 NCC, và gần như không có contract nào. Nghĩa là từng marketing campaign, team nào cần thì tự đi tìm NCC. Không ai có leverage, không ai negotiate giá tốt, không ai kiểm soát chất lượng. Đây là <strong>immediate consolidation opportunity</strong>.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">!</div>
+              <div class="step-body">
+                <div class="step-title">MRO: 112 NCC, contract coverage 5% — Highest risk trong danh mục</div>
+                <p class="step-desc">Mua spare part từ 112 NCC mà hầu như không có contract. Nếu 1 máy quan trọng bị hỏng và NCC không có hàng → dây chuyền stop. Đây là <strong>risk mitigation priority</strong>, không phải chỉ cost savings.</p>
+              </div>
+            </div>
+          </div>
+
+          <h3>Từ Spend Cube → Action Plan cụ thể</h3>
+
+          <p>Sau khi identify được bài toán, đây là cách giải:</p>
+
+          <div class="example">
+            <div class="example-label">Bài toán 1 — POSM: 67 NCC → Consolidate xuống còn bao nhiêu?</div>
+            <p><strong>Bước 1 — Chạy Pareto:</strong> Sort 67 NCC theo spend từ cao xuống thấp. Kết quả: top 7 NCC đã chiếm 80% tổng 38 tỷ = 30.4 tỷ. 60 NCC còn lại chia nhau 7.6 tỷ.</p>
+            <p><strong>Bước 2 — Slice theo BU:</strong> Dùng Spend Cube nhìn theo chiều BU → phát hiện: BU miền Nam dùng NCC A (printing shop địa phương), BU miền Bắc dùng NCC D (cũng là printing shop địa phương tương tự). Cùng 1 loại sản phẩm, 2 NCC khác nhau, 2 mức giá khác nhau.</p>
+            <p><strong>Bước 3 — Consolidate strategy:</strong> Gom về 3 NCC: 1 NCC chuyên về printing/display (primary), 1 NCC backup, 1 NCC specialty cho items đặc thù. Estimate savings: leverage volume lớn hơn → negotiate giảm 12–18% unit price → tiết kiệm 4.5–6.8 tỷ/năm.</p>
+            <p><strong>Bước 4 — Contract hóa:</strong> Ký framework agreement với 3 NCC. Mỗi campaign Marketing chỉ cần release PO trong framework, không cần sourcing lại từ đầu → giảm lead time từ 3 tuần xuống 1 tuần.</p>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Bài toán 2 — MRO: 112 NCC, risk quá cao — làm gì?</div>
+            <p><strong>Bước 1 — Slice theo Category + Supplier:</strong> Trong 112 NCC, nhóm lại theo loại spare part. Phát hiện: 40 NCC cung cấp cùng loại fasteners (bu lông, ốc vít) cho các nhà máy khác nhau — cùng sản phẩm, mua rải rác, giá khác nhau 30–40% giữa các site.</p>
+            <p><strong>Bước 2 — Slice theo BU (Site):</strong> Site A đang mua fasteners giá 15k/bộ, Site B mua cùng spec giá 22k/bộ từ NCC khác. Same item, cách nhau 7k. Nhân với volume → chênh lệch hàng trăm triệu/năm chỉ từ 1 sub-category nhỏ.</p>
+            <p><strong>Bước 3 — Standardize + Consolidate:</strong> Tạo preferred vendor list cho từng nhóm spare part. Chọn 1 MRO distributor lớn (có thể supply nhiều loại) → giảm từ 112 xuống 15–20 NCC. Ký blanket contract với price list cố định.</p>
+            <p><strong>Bước 4 — Buffer stock cho critical items:</strong> Với parts cho máy quan trọng nhất → yêu cầu NCC maintain consignment stock tại nhà máy. NCC để hàng trong kho mình, mình chỉ trả tiền khi dùng.</p>
+          </div>
+
+          <!-- ── SPEND TREE ── -->
+          <h3>Phần B · Spend Tree — Đào sâu từng tầng</h3>
+
+          <p>Nếu Spend Cube cho mày nhìn <em>đồng thời</em> 3 chiều, thì <strong>Spend Tree</strong> cho mày <em>drill-down</em> theo chiều dọc — từ tổng xuống chi tiết theo từng nhánh.</p>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Nguyên tắc cốt lõi</span>
+            <p>Spend Tree <strong>không phải là một chart</strong> — đây là một <strong>framework tư duy</strong>. Mày bắt đầu từ tổng, rồi tự hỏi "cái này split thành gì?" và cứ thế đào sâu cho đến khi đủ granular để ra quyết định.</p>
+          </div>
+
+          <p>Cụ thể, Spend Tree có 3 hướng drill-down khác nhau từ Total Spend:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Hướng drill-down</th><th>Câu hỏi cần trả lời</th><th>Khi nào dùng</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>by Commodity → by Supplier → by Quarter</strong></td>
+                  <td>Category X đang được mua từ NCC nào, và trend theo thời gian như thế nào?</td>
+                  <td>Khi muốn hiểu structure của 1 category cụ thể</td>
+                </tr>
+                <tr>
+                  <td><strong>by Supplier → by Commodity → by Quarter</strong></td>
+                  <td>NCC Y đang bán cho mình những gì, và volume đang tăng hay giảm?</td>
+                  <td>Khi chuẩn bị negotiate với NCC, cần hiểu toàn bộ relationship</td>
+                </tr>
+                <tr>
+                  <td><strong>by Quarter → by Supplier → by Commodity</strong></td>
+                  <td>Q3 spending tăng đột biến vì NCC nào? Category nào?</td>
+                  <td>Khi Finance hỏi "tại sao Q3 overspend?" — cần trace ngược lại</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Ví dụ số — Spend Tree cho Packaging category</h3>
+
+          <p>Giả sử Packaging = 120 tỷ/năm. Đây là cách mày drill-down:</p>
+
+          <div class="example">
+            <div class="example-label">Level 1 — Total Packaging Spend: 120 tỷ</div>
+            <p>→ <strong>Primary Packaging:</strong> 85 tỷ (71%)</p>
+            <p>→ <strong>Secondary Packaging:</strong> 35 tỷ (29%)</p>
+            <p><em>Insight ngay lập tức:</em> Primary chiếm 71%. Focus vào đây trước.</p>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Level 2 — Primary Packaging (85 tỷ) split tiếp</div>
+            <p>→ <strong>Lon nhôm 330ml:</strong> 48 tỷ (56%)</p>
+            <p>→ <strong>Lon nhôm 250ml:</strong> 22 tỷ (26%)</p>
+            <p>→ <strong>Chai PET 500ml:</strong> 15 tỷ (18%)</p>
+            <p><em>Insight:</em> Lon nhôm 330ml = hơn nửa primary spend. Đây là nơi 1% savings = 480 triệu đồng.</p>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Level 3 — Lon nhôm 330ml (48 tỷ) split theo Supplier</div>
+            <p>→ <strong>NCC A (Toyo Seikan):</strong> 28 tỷ (58%)</p>
+            <p>→ <strong>NCC B (Ball Vietnam):</strong> 14 tỷ (29%)</p>
+            <p>→ <strong>NCC C (local):</strong> 6 tỷ (13%)</p>
+            <p><em>Insight:</em> Mày phụ thuộc vào NCC A quá nhiều (58%). Nếu NCC A có vấn đề → thiếu hàng cho 58% volume lon. Cần dual source hoặc tăng share của NCC B.</p>
+          </div>
+
+          <div class="example">
+            <div class="example-label">Level 4 — NCC A (28 tỷ) split theo Quarter — phát hiện bất thường</div>
+            <p>→ Q1: 5.8 tỷ | Q2: 6.2 tỷ | Q3: <strong style="color:var(--accent)">9.8 tỷ</strong> | Q4: 6.2 tỷ</p>
+            <p><em>Insight:</em> Q3 tăng đột biến 58% so với Q2. Tại sao? Drill tiếp → phát hiện: tháng 8 có campaign Tết Trung thu → order tăng gấp đôi, nhưng không báo NCC trước → NCC charge premium rate vì production change đột ngột (+8% surcharge). Đây là <strong>avoidable cost</strong> — lần sau phải share forecast sớm.</p>
+          </div>
+
+          <div class="callout callout-green">
+            <span class="callout-label">Bài học từ Spend Tree này</span>
+            <p>Từ 1 con số "120 tỷ Packaging spend", sau 4 level drill-down mày đã tìm ra: (1) đang quá phụ thuộc NCC A, (2) Q3 đang bị charge premium vì thiếu forecast visibility, (3) avoidable cost ước tính ~784 triệu/năm chỉ từ surcharge Q3. Không cần negotiate giá — chỉ cần share forecast sớm hơn.</p>
+          </div>
+
+          <!-- ── HOW TO BUILD ── -->
+          <h3>Phần C · Cách xây Spend Cube/Tree trong thực tế — bước cụ thể</h3>
+
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Collect raw data từ tất cả sources</div>
+                <p class="step-desc">Pull toàn bộ PO/invoice data từ ERP (SAP, Oracle, D365) — tối thiểu 2 năm. Lấy các cột: Date, Supplier name, Supplier ID, Category, Sub-category, Amount, Business Unit / Cost Center, Currency. Nếu có nhiều site → merge tất cả vào 1 file master.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Cleanse &amp; Standardize — bước tốn thời gian nhất</div>
+                <p class="step-desc">Đây là bước mà 80% project spend analysis thất bại. Các vấn đề thường gặp: cùng 1 NCC nhưng tên khác nhau ("Toyo Seikan VN", "Toyo Seikan Vietnam", "TSV"), currency chưa convert về VND, category code khác nhau giữa các site, duplicate invoice. Phải chuẩn hóa tất cả trước khi phân tích.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Classify vào Taxonomy — Category hierarchy</div>
+                <p class="step-desc">Mỗi line item phải được gán vào Level 1 (Direct/Indirect) → Level 2 (Raw Material/Packaging/MRO...) → Level 3 (Primary Packaging/Secondary...) → Level 4 (Lon 330ml/Lon 250ml...). Taxonomy này phải nhất quán xuyên suốt toàn bộ dataset.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Build Pivot Table — xương sống của Spend Tree</div>
+                <p class="step-desc">Trong Excel: Insert → PivotTable. Kéo Category/Sub-category vào Rows, Supplier vào Columns hoặc Filter, Amount vào Values. Từ 1 Pivot Table mày có thể tạo ra mọi góc nhìn chỉ bằng cách swap fields. Thêm slicer cho Year/Quarter để xem trend theo thời gian.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title">Chạy 3 analysis cốt lõi → ra insights</div>
+                <p class="step-desc"><strong>(a) Portfolio analysis:</strong> % mỗi category trong total spend — đâu là chỗ tập trung nhất? <strong>(b) Pareto analysis:</strong> top 20% NCC = bao nhiêu % spend? <strong>(c) Trend YoY:</strong> category nào đang tăng/giảm và có align với volume business không?</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">6</div>
+              <div class="step-body">
+                <div class="step-title">Translate insights → Prioritized action list</div>
+                <p class="step-desc">Mỗi insight phải kết thúc bằng: <em>Action là gì? Owner là ai? Timeline bao lâu? Expected savings bao nhiêu?</em> Không có action = spend analysis chỉ là báo cáo đẹp, không có giá trị.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SIGNAL TABLE ── -->
+          <h3>Phần D · "Đọc" dữ liệu — những signal cần chú ý</h3>
+
+          <p>Khi nhìn vào Spend Cube/Tree, đây là những pattern phổ biến và ý nghĩa của chúng:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Pattern mày thấy</th><th>Ý nghĩa</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1 category, nhiều BU mua từ NCC khác nhau</td>
+                  <td>Fragmentation — mất leverage, giá không nhất quán</td>
+                  <td>Consolidate NCC, negotiate volume deal chung</td>
+                </tr>
+                <tr>
+                  <td>Spending tăng YoY nhưng volume flat</td>
+                  <td>Unit price đang leo — NCC đang "creeping" giá</td>
+                  <td>Yêu cầu NCC justify, benchmark market, xem xét re-tender</td>
+                </tr>
+                <tr>
+                  <td>1 NCC chiếm &gt;60% spend trong category</td>
+                  <td>Single source risk — quá phụ thuộc</td>
+                  <td>Dual source, develop second supplier, reduce concentration</td>
+                </tr>
+                <tr>
+                  <td>Spending spike rõ ràng trong 1 quarter</td>
+                  <td>Có thể là rush order, emergency buy, hoặc surcharge</td>
+                  <td>Trace ngược nguyên nhân, fix planning process</td>
+                </tr>
+                <tr>
+                  <td>Nhiều NCC nhỏ dưới 100 triệu/năm</td>
+                  <td>Tail spend — admin cost không xứng với value</td>
+                  <td>Consolidate hoặc chuyển sang P-card/marketplace</td>
+                </tr>
+                <tr>
+                  <td>Volume tăng nhưng spend giảm</td>
+                  <td>Procurement đang làm đúng — đã deal giá tốt</td>
+                  <td>Document savings, communicate với stakeholder</td>
+                </tr>
+                <tr>
+                  <td>Spend không có supplier name (N/A)</td>
+                  <td>Maverick spend — mua ngoài hệ thống, không qua Procurement</td>
+                  <td>Trace ra ai đang mua, bring vào controlled process</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-accent">
+            <span class="callout-label">Mindset quan trọng nhất</span>
+            <p>Spend Cube và Spend Tree không phải là đích đến — chúng là <strong>điểm khởi đầu của cuộc hội thoại</strong>. Mỗi insight từ data phải được confirm với stakeholder (vì data có thể miss context), rồi mới convert thành action plan. Chỉ khi action được implement và savings được realized thì phân tích mới thực sự có giá trị.</p>
+          </div>
+
+        </div>
+
+        <div class="chapter" id="s3-supplier-analysis">
+          <div class="chapter-label">Chương 9</div>
+          <h2 class="chapter-title">Supplier Analysis — Pareto &amp; Contract</h2>
+          <h3><a href="https://planergy.com/blog/pareto-analysis-in-procurement/" target="_blank" class="kw">Pareto Analysis</a> — Quy tắc 80/20</h3>
+          <p>Rank tất cả suppliers từ high spend đến low spend. Thông thường <strong>20% số NCC chiếm 80% tổng spending</strong>.</p>
+          <div class="nw-grid">
+            <div class="nw-card need">
+              <div class="nw-card-title">Tại sao Pareto quan trọng?</div>
+              <p>Làm team nhận ra mức độ <strong>fragmented</strong> của supplier base. Fully understand ai là key suppliers → nền tảng cho category planning tiếp theo. Focus effort vào đúng chỗ có impact.</p>
+            </div>
+            <div class="nw-card want">
+              <div class="nw-card-title">Cách làm thực tế</div>
+              <p>Collect data → Cleanse → Pivot by supplier → Sort cao xuống thấp → Tính cumulative % spend → Vẽ Pareto curve → Identify top 20% suppliers = 80% spend.</p>
+            </div>
+          </div>
+          <h3>Contract Analysis</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Output</th><th>Strategic Implication</th></tr></thead>
+              <tbody>
+                <tr><td>% Spend covered by contracts</td><td>Nếu thấp → risk cao, không có leverage. Ưu tiên contract hóa key suppliers ngay.</td></tr>
+                <tr><td>Contract expiry timeline</td><td>Supplier nào sắp hết hạn? Cần renew hay re-tender?</td></tr>
+                <tr><td><a href="https://www.ivalua.com/blog/maverick-spending/" target="_blank" class="kw">Maverick spend</a> (không có contract)</td><td>Cần control — không để end-user tự mua ngoài hệ thống.</td></tr>
+                <tr><td>Contract terms analysis</td><td>Payment terms có chuẩn không? Penalty clauses đủ chặt chưa?</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout callout-amber">
+            <span class="callout-label">Insight thực tế</span>
+            <p>Nhiều công ty khi làm Contract Analysis lần đầu mới phát hiện: có tới 40–60% spend không được cover bởi bất kỳ contract nào. Đây là <strong>immediate win</strong> — contract hóa spend lớn nhất trước, negotiate terms tốt hơn, reduce risk ngay lập tức.</p>
+          </div>
+        </div>
+
+          <div class="divider-ornament">· · ·</div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const navLinks = document.querySelectorAll('.nav-link[data-target]');
+  const sessionCards = document.querySelectorAll('.session-card[data-target]');
+  const sessions = document.querySelectorAll('.session');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('backdrop');
+  const mobileToggle = document.getElementById('mobileToggle');
+
+  function showSession(targetId) {
+    sessions.forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(targetId);
+    if (target) target.classList.add('active');
+
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.target === targetId);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    if (window.innerWidth <= 900) {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('show');
+    }
+
+    // Try to update URL if allowed (not in iframe or cross-origin)
+    try {
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + targetId);
+      }
+    } catch (e) {
+      // Silently fail if in restricted iframe context
+    }
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.dataset.target;
+      if (target) showSession(target);
+    });
+  });
+
+  sessionCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = card.dataset.target;
+      if (target) showSession(target);
+    });
+  });
+
+  // Handle TOC inline links (smooth scroll within session)
+  document.querySelectorAll('.toc-inline a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Mobile toggle
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+
+  // Handle hash on load
+  const hash = window.location.hash.slice(1);
+  if (hash && document.getElementById(hash)) {
+    showSession(hash);
+  } else {
+    document.querySelector('.nav-link[data-target="home"]').classList.add('active');
+  }
+</script>
+
+</body>
+</html>
